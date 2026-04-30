@@ -1,0 +1,10 @@
+name: Deploy
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cloudflare/pages-action@v1
+      - uses: org/repo/.github/workflows/reusable.yml@main
+      - uses: ./.github/actions/local

@@ -1,0 +1,9 @@
+[project]
+dependencies = [
+  "openai>=1.0",
+  "requests>=2"
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sentry-sdk = "^1.40"

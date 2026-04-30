@@ -11,13 +11,17 @@
     ".": {
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
+    },
+    "./parsers": {
+      "types": "./src/parsers/index.d.ts",
+      "default": "./src/parsers/index.js"
     }
   },
   "files": [
     "src"
   ],
   "scripts": {
-    "test": "node test/file-discovery.test.mjs"
+    "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs"
   },
   "dependencies": {
     "@scaneur/rules": "0.0.0",

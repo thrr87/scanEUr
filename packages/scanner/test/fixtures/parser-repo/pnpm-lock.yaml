@@ -1,0 +1,12 @@
+lockfileVersion: '9.0'
+
+importers:
+  .:
+    dependencies:
+      '@vercel/analytics':
+        specifier: ^1.2.0
+        version: 1.2.0
+
+packages:
+  /@vercel/analytics@1.2.0:
+    resolution: {integrity: sha512-placeholder}

@@ -1,5 +1,8 @@
-import { readdir, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
+import { parseEvidenceCandidates } from "./parsers/index.js";
+
+export { parseContent, parseEvidenceCandidates } from "./parsers/index.js";
 
 export const DEFAULT_MAX_FILE_BYTES = 5 * 1024 * 1024;
 
@@ -347,3 +350,22 @@ export async function discoverFiles(targetPath, options = {}) {
 }
 
 export const discoverSupportedFiles = discoverFiles;
+
+export async function parseDiscoveredFile(targetPath, scannedFile) {
+  const rootPath = path.resolve(targetPath);
+  const absolutePath = path.resolve(rootPath, scannedFile.path);
+  const relativeToRoot = path.relative(rootPath, absolutePath);
+
+  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
+    throw new Error("Refusing to parse a file outside the scan target.");
+  }
+
+  const content = await readFile(absolutePath, "utf8");
+
+  return parseEvidenceCandidates({
+    source_file: scannedFile.path,
+    source_type: scannedFile.file_type,
+    parser: scannedFile.parser,
+    content
+  });
+}
