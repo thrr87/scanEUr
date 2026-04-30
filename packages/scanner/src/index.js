@@ -589,6 +589,378 @@ function compareFindings(left, right) {
   return left.finding_id.localeCompare(right.finding_id);
 }
 
+const UNSUPPORTED_UNKNOWN_CLAIMS = Object.freeze([
+  "vendor identity",
+  "jurisdiction",
+  "ownership/control",
+  "data processing role"
+]);
+
+const UNKNOWN_REVIEW_STEPS = Object.freeze([
+  "Identify the service owner.",
+  "Confirm whether the endpoint or integration is used in production.",
+  "Check whether personal data is sent.",
+  "Add a vendor profile or fingerprint if relevant."
+]);
+
+const COMMON_ENV_PREFIXES = new Set([
+  "APP",
+  "CI",
+  "DEBUG",
+  "DEV",
+  "DOCKER",
+  "HOST",
+  "HTTP",
+  "HTTPS",
+  "LOCAL",
+  "LOG",
+  "NODE",
+  "NPM",
+  "PATH",
+  "PORT",
+  "PUBLIC",
+  "PWD",
+  "SERVER",
+  "SERVICE",
+  "SHELL",
+  "TEST",
+  "TMP",
+  "URL",
+  "USER",
+  "VITE",
+  "WEB"
+]);
+
+const COMMON_ENV_PREFIX_CHAINS = new Set([
+  "NEXT_PUBLIC",
+  "NUXT_PUBLIC",
+  "PUBLIC",
+  "REACT_APP",
+  "VITE"
+]);
+
+const SECRET_LIKE_ENV_PARTS = new Set([
+  "API",
+  "API_KEY",
+  "CLIENT",
+  "CLIENT_ID",
+  "DSN",
+  "ENDPOINT",
+  "PROJECT_ID",
+  "SECRET",
+  "TOKEN",
+  "URL",
+  "WEBHOOK"
+]);
+
+const COMMON_PUBLIC_DOMAINS = new Set([
+  "api.github.com",
+  "cdn.jsdelivr.net",
+  "cdnjs.cloudflare.com",
+  "docker.io",
+  "docs.github.com",
+  "example.com",
+  "example.net",
+  "example.org",
+  "files.pythonhosted.org",
+  "ghcr.io",
+  "github.com",
+  "gitlab.com",
+  "golang.org",
+  "gopkg.in",
+  "npmjs.com",
+  "pkg.go.dev",
+  "proxy.golang.org",
+  "pypi.org",
+  "registry-1.docker.io",
+  "registry.npmjs.org",
+  "repo.maven.apache.org",
+  "rubygems.org",
+  "schema.org",
+  "schemas.android.com",
+  "www.w3.org"
+]);
+
+const COMMON_PUBLIC_DOMAIN_SUFFIXES = [
+  ".githubusercontent.com",
+  ".npmjs.org",
+  ".pythonhosted.org"
+];
+
+const DOMAIN_SIGNAL_LABELS = [
+  "api",
+  "auth",
+  "cdn",
+  "collector",
+  "events",
+  "hooks",
+  "ingest",
+  "login",
+  "payments",
+  "telemetry",
+  "track",
+  "webhook"
+];
+
+const GENERIC_DOCKER_IMAGE_NAMES = new Set([
+  "alpine",
+  "busybox",
+  "debian",
+  "golang",
+  "httpd",
+  "mysql",
+  "nginx",
+  "node",
+  "postgres",
+  "python",
+  "redis",
+  "ruby",
+  "ubuntu"
+]);
+
+const COMMON_DOCKER_OWNERS = new Set([
+  "library",
+  "docker",
+  "docker.io/library",
+  "ghcr.io/actions",
+  "ghcr.io/github"
+]);
+
+const GENERIC_GITHUB_ACTION_OWNERS = new Set([
+  "actions",
+  "github",
+  "docker",
+  "pnpm",
+  "yarnpkg"
+]);
+
+const ACTION_SIGNAL_WORDS = [
+  "analytics",
+  "auth",
+  "cloud",
+  "deploy",
+  "notify",
+  "pages",
+  "payment",
+  "scan",
+  "secret",
+  "security",
+  "slack",
+  "sms",
+  "upload"
+];
+
+function normalizeUnknownValue(value) {
+  return String(value ?? "").trim();
+}
+
+function unknownCandidateType(candidate) {
+  if (candidate.evidence_type === "domain") return "external_domain";
+  if (candidate.evidence_type === "env_var") return "env_prefix";
+  if (candidate.evidence_type === "docker_image") return "docker_image";
+  if (candidate.evidence_type === "github_action") return "github_action";
+  if (candidate.evidence_type === "package_name") return "package";
+  if (candidate.evidence_type === "config_file" || candidate.evidence_type === "text_pattern") return "config_reference";
+  return null;
+}
+
+function candidateConfidence(candidate, fallback = "medium") {
+  const value = confidence(candidate.confidence_hint, fallback);
+  return value === "high" ? "medium" : value;
+}
+
+function domainLabels(domain) {
+  return String(domain).split(".").filter(Boolean);
+}
+
+function isCommonPublicDomain(domain) {
+  return (
+    COMMON_PUBLIC_DOMAINS.has(domain) ||
+    COMMON_PUBLIC_DOMAIN_SUFFIXES.some((suffix) => domain.endsWith(suffix))
+  );
+}
+
+function isUnknownDomainCandidate(candidate) {
+  const domain = normalizeUnknownValue(candidate.normalized_value).toLowerCase();
+  if (!domain || isCommonPublicDomain(domain)) return false;
+  if (candidate.source_type === "package_manifest" || candidate.source_type === "lockfile") return false;
+
+  const labels = domainLabels(domain);
+  if (labels.some((label) => DOMAIN_SIGNAL_LABELS.includes(label))) return true;
+  if (candidate.source_type === "config_file" || candidate.source_type === "workflow") return true;
+
+  return false;
+}
+
+function envPrefix(value) {
+  const normalized = normalizeUnknownValue(value).toUpperCase();
+  const parts = normalized.split("_").filter(Boolean);
+  if (parts.length < 2) return null;
+
+  const firstTwo = parts.slice(0, 2).join("_");
+  if (COMMON_ENV_PREFIX_CHAINS.has(firstTwo)) return null;
+  if (COMMON_ENV_PREFIX_CHAINS.has(parts[0]) || COMMON_ENV_PREFIXES.has(parts[0])) return null;
+  if (!/^[A-Z][A-Z0-9]{1,31}$/.test(parts[0])) return null;
+
+  return parts[0];
+}
+
+function envHasServiceSignal(value) {
+  const normalized = normalizeUnknownValue(value).toUpperCase();
+  const parts = normalized.split("_").filter(Boolean);
+  const partPairs = parts.slice(0, -1).map((part, index) => `${part}_${parts[index + 1]}`);
+  return [...parts, ...partPairs].some((part) => SECRET_LIKE_ENV_PARTS.has(part));
+}
+
+function dockerOwner(value) {
+  const normalized = normalizeUnknownValue(value).toLowerCase().split("@")[0];
+  if (!normalized) return null;
+
+  const parts = normalized.split("/").filter(Boolean);
+  const imageName = parts.at(-1)?.split(":")[0] ?? "";
+  if (parts.length === 1) return GENERIC_DOCKER_IMAGE_NAMES.has(imageName) ? null : imageName;
+
+  const owner = parts.length >= 3 ? `${parts[0]}/${parts[1]}` : parts[0];
+  if (COMMON_DOCKER_OWNERS.has(owner) || COMMON_DOCKER_OWNERS.has(`${parts[0]}/${owner}`)) return null;
+  if (GENERIC_DOCKER_IMAGE_NAMES.has(imageName) && (owner === "library" || owner === "docker.io/library")) return null;
+  return owner;
+}
+
+function githubActionOwner(value) {
+  const repository = normalizeUnknownValue(value).toLowerCase().split("@")[0];
+  const parts = repository.split("/").filter(Boolean);
+  if (parts.length < 2) return null;
+  if (GENERIC_GITHUB_ACTION_OWNERS.has(parts[0])) return null;
+  return parts[0];
+}
+
+function githubActionHasSignal(value) {
+  const repository = normalizeUnknownValue(value).toLowerCase().split("@")[0];
+  return ACTION_SIGNAL_WORDS.some((word) => repository.includes(word));
+}
+
+function emptyUnknownBucket(candidateType, normalizedValue, reasonFlagged, evidenceConfidence) {
+  return {
+    candidate_id: `unknown:${candidateType}:${normalizedValue}`,
+    candidate_type: candidateType,
+    normalized_value: normalizedValue,
+    source_files: [],
+    reason_flagged: reasonFlagged,
+    evidence_confidence: evidenceConfidence,
+    manual_review_recommended: true,
+    unsupported_claims: [...UNSUPPORTED_UNKNOWN_CLAIMS],
+    suggested_review_steps: [...UNKNOWN_REVIEW_STEPS],
+    _sourceFiles: new Set()
+  };
+}
+
+function unknownDescriptor(candidate, envPrefixCounts) {
+  const candidateType = unknownCandidateType(candidate);
+  if (!candidateType) return null;
+
+  if (candidateType === "external_domain") {
+    if (!isUnknownDomainCandidate(candidate)) return null;
+    return {
+      candidateType,
+      normalizedValue: normalizeUnknownValue(candidate.normalized_value).toLowerCase(),
+      reasonFlagged: "External-looking domain did not match a known vendor profile or fingerprint.",
+      evidenceConfidence: candidateConfidence(candidate, "medium")
+    };
+  }
+
+  if (candidateType === "env_prefix") {
+    const prefix = envPrefix(candidate.normalized_value);
+    if (!prefix || !envHasServiceSignal(candidate.normalized_value) || (envPrefixCounts.get(prefix) ?? 0) < 2) {
+      return null;
+    }
+    return {
+      candidateType,
+      normalizedValue: prefix,
+      reasonFlagged: "Multiple unknown environment variable keys share this service-looking prefix.",
+      evidenceConfidence: "medium"
+    };
+  }
+
+  if (candidateType === "docker_image") {
+    const owner = dockerOwner(candidate.normalized_value);
+    if (!owner) return null;
+    return {
+      candidateType,
+      normalizedValue: owner,
+      reasonFlagged: "Docker image owner or registry namespace did not match a known vendor profile or fingerprint.",
+      evidenceConfidence: candidateConfidence(candidate, "medium")
+    };
+  }
+
+  if (candidateType === "github_action") {
+    const owner = githubActionOwner(candidate.normalized_value);
+    if (!owner || !githubActionHasSignal(candidate.normalized_value)) return null;
+    return {
+      candidateType,
+      normalizedValue: owner,
+      reasonFlagged: "GitHub Action owner did not match a known vendor profile or fingerprint and the action name has an external-service signal.",
+      evidenceConfidence: candidateConfidence(candidate, "medium")
+    };
+  }
+
+  return null;
+}
+
+function finalizeUnknownCandidate(bucket) {
+  const { _sourceFiles, ...candidate } = bucket;
+  candidate.source_files = [..._sourceFiles].sort(compareStrings);
+  return candidate;
+}
+
+function compareUnknownCandidates(left, right) {
+  return left.candidate_id.localeCompare(right.candidate_id);
+}
+
+export function detectUnknownCandidates(evidenceCandidates, options) {
+  const matcher = typeof options?.matchCandidate === "function" ? options : createVendorMatcher(options);
+  const unmatched = [];
+  const envPrefixCounts = new Map();
+
+  for (const candidate of evidenceCandidates) {
+    if (matcher.matchCandidate(candidate).length > 0) continue;
+    unmatched.push(candidate);
+
+    if (candidate.evidence_type === "env_var" && envHasServiceSignal(candidate.normalized_value)) {
+      const prefix = envPrefix(candidate.normalized_value);
+      if (prefix) envPrefixCounts.set(prefix, (envPrefixCounts.get(prefix) ?? 0) + 1);
+    }
+  }
+
+  const buckets = new Map();
+  for (const candidate of unmatched) {
+    const descriptor = unknownDescriptor(candidate, envPrefixCounts);
+    if (!descriptor) continue;
+
+    const key = `unknown:${descriptor.candidateType}:${descriptor.normalizedValue}`;
+    const bucket =
+      buckets.get(key) ??
+      emptyUnknownBucket(
+        descriptor.candidateType,
+        descriptor.normalizedValue,
+        descriptor.reasonFlagged,
+        descriptor.evidenceConfidence
+      );
+
+    bucket._sourceFiles.add(candidate.source_file);
+    bucket.evidence_confidence = higherConfidence(bucket.evidence_confidence, descriptor.evidenceConfidence);
+    buckets.set(key, bucket);
+  }
+
+  return [...buckets.values()].map(finalizeUnknownCandidate).sort(compareUnknownCandidates);
+}
+
+export function matchEvidenceCandidatesWithUnknowns(evidenceCandidates, options) {
+  return {
+    findings: matchEvidenceCandidates(evidenceCandidates, options),
+    unknown_candidates: detectUnknownCandidates(evidenceCandidates, options)
+  };
+}
+
 export function matchEvidenceCandidates(evidenceCandidates, options) {
   const matcher = typeof options?.matchCandidate === "function" ? options : createVendorMatcher(options);
   const buckets = new Map();

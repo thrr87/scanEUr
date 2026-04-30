@@ -21,7 +21,7 @@
     "src"
   ],
   "scripts": {
-    "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs && node test/matcher.test.mjs && node test/fingerprint.test.mjs"
+    "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs && node test/matcher.test.mjs && node test/fingerprint.test.mjs && node test/unknown.test.mjs"
   },
   "dependencies": {
     "@scaneur/rules": "0.0.0",

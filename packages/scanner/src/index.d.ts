@@ -1,4 +1,4 @@
-import type { FileScanned, FileSkipped, Finding } from "@scaneur/types";
+import type { FileScanned, FileSkipped, Finding, UnknownCandidate } from "@scaneur/types";
 import type { VendorDatabase, FingerprintDatabase, VendorMatcher } from "@scaneur/rules";
 
 export type FileDiscoveryOptions = {
@@ -74,3 +74,24 @@ export function matchEvidenceCandidates(
         fingerprintDatabase?: FingerprintDatabase;
       }
 ): Finding[];
+export function detectUnknownCandidates(
+  evidenceCandidates: EvidenceCandidate[],
+  options:
+    | VendorMatcher
+    | {
+        vendorDatabase: VendorDatabase;
+        fingerprintDatabase?: FingerprintDatabase;
+      }
+): UnknownCandidate[];
+export function matchEvidenceCandidatesWithUnknowns(
+  evidenceCandidates: EvidenceCandidate[],
+  options:
+    | VendorMatcher
+    | {
+        vendorDatabase: VendorDatabase;
+        fingerprintDatabase?: FingerprintDatabase;
+      }
+): {
+  findings: Finding[];
+  unknown_candidates: UnknownCandidate[];
+};
