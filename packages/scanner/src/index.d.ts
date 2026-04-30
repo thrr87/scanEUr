@@ -1,4 +1,5 @@
-import type { FileScanned, FileSkipped } from "@scaneur/types";
+import type { FileScanned, FileSkipped, Finding } from "@scaneur/types";
+import type { VendorDatabase, FingerprintDatabase, VendorMatcher } from "@scaneur/rules";
 
 export type FileDiscoveryOptions = {
   ignoredDirectories?: string[];
@@ -64,3 +65,12 @@ export const discoverSupportedFiles: typeof discoverFiles;
 export function parseEvidenceCandidates(input: ParseEvidenceInput): ParserResult;
 export const parseContent: typeof parseEvidenceCandidates;
 export function parseDiscoveredFile(targetPath: string, scannedFile: FileScanned): Promise<ParserResult>;
+export function matchEvidenceCandidates(
+  evidenceCandidates: EvidenceCandidate[],
+  options:
+    | VendorMatcher
+    | {
+        vendorDatabase: VendorDatabase;
+        fingerprintDatabase?: FingerprintDatabase;
+      }
+): Finding[];

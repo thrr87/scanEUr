@@ -1,5 +1,6 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
+import { createVendorMatcher } from "@scaneur/rules";
 import { parseEvidenceCandidates } from "./parsers/index.js";
 
 export { parseContent, parseEvidenceCandidates } from "./parsers/index.js";
@@ -368,4 +369,218 @@ export async function parseDiscoveredFile(targetPath, scannedFile) {
     parser: scannedFile.parser,
     content
   });
+}
+
+const CONFIDENCE_RANK = {
+  unknown: 0,
+  low: 1,
+  medium: 2,
+  high: 3
+};
+
+const VALID_CONFIDENCE = new Set(Object.keys(CONFIDENCE_RANK));
+
+function confidence(value, fallback = "unknown") {
+  return VALID_CONFIDENCE.has(value) ? value : fallback;
+}
+
+function higherConfidence(left, right) {
+  return CONFIDENCE_RANK[confidence(left)] >= CONFIDENCE_RANK[confidence(right)] ? confidence(left) : confidence(right);
+}
+
+function stableHash(value) {
+  let hash = 5381;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 33) ^ value.charCodeAt(index);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function unique(values) {
+  return [...new Set(values.filter((value) => typeof value === "string" && value.trim() !== ""))];
+}
+
+function evidenceNoun(evidenceType) {
+  return {
+    package_name: "package",
+    env_var: "environment variable",
+    domain: "domain",
+    docker_image: "Docker image",
+    github_action: "GitHub Action",
+    config_file: "config file",
+    terraform_provider: "Terraform provider",
+    text_pattern: "text pattern"
+  }[evidenceType] ?? "evidence";
+}
+
+function defaultObservedFact(candidate, match) {
+  if (match.kind === "fingerprint" && match.fingerprint.result.observed_fact) {
+    return match.fingerprint.result.observed_fact;
+  }
+  return `The ${evidenceNoun(candidate.evidence_type)} \`${candidate.normalized_value}\` was found in \`${candidate.source_file}\`.`;
+}
+
+function defaultInference(match) {
+  if (match.kind === "fingerprint" && match.fingerprint.result.inference) {
+    return match.fingerprint.result.inference;
+  }
+  const vendorName = match.vendor?.name ?? match.fingerprint?.result.vendor_id ?? "the matched service";
+  return `The project may integrate with ${vendorName}.`;
+}
+
+function matchVendorId(match) {
+  if (match.kind === "vendor") return match.vendor.id;
+  return match.vendor?.id ?? match.fingerprint.result.vendor_id;
+}
+
+function matchVendorName(match) {
+  if (match.vendor) return match.vendor.name;
+  if (match.kind === "fingerprint" && match.fingerprint.result.vendor_id) return match.fingerprint.result.vendor_id;
+  return match.fingerprint.result.evidence_label;
+}
+
+function matchCategory(match) {
+  if (match.vendor) return match.vendor.category;
+  if (match.kind === "fingerprint") return match.fingerprint.result.candidate_category ?? "unknown";
+  return "unknown";
+}
+
+function matchVerificationStatus(match) {
+  if (match.kind === "vendor") return match.vendor.verification.status;
+  return match.vendor?.verification.status ?? match.fingerprint.verification_status;
+}
+
+function defaultScores(match, evidenceConfidence) {
+  if (match.vendor) {
+    return {
+      ...match.vendor.scoring_defaults,
+      evidence_confidence: evidenceConfidence
+    };
+  }
+  return {
+    jurisdiction_signal: "unknown",
+    data_sensitivity_signal: "unknown",
+    operational_criticality: "unknown",
+    migration_effort: "unknown",
+    alternative_maturity: "unknown",
+    evidence_confidence: evidenceConfidence
+  };
+}
+
+function defaultRecommendations(match) {
+  if (match.vendor) return match.vendor.recommendation_defaults.categories;
+  return ["manual_review_required"];
+}
+
+function defaultLimitations(match) {
+  if (match.kind === "vendor") return match.vendor.limitations;
+  return unique([...(match.vendor?.limitations ?? []), ...match.fingerprint.limitations]);
+}
+
+function findingKey(match) {
+  const vendorId = matchVendorId(match);
+  if (vendorId) return `vendor:${vendorId}`;
+  return `fingerprint:${match.fingerprint.id}`;
+}
+
+function findingType(match) {
+  return match.kind === "vendor" ? "known_vendor" : "fingerprint_only";
+}
+
+function makeEvidenceItem(candidate, match) {
+  const itemConfidence = confidence(
+    candidate.confidence_hint,
+    match.kind === "fingerprint" ? match.fingerprint.result.confidence : match.vendor?.scoring_defaults.evidence_confidence
+  );
+  const observedFact = defaultObservedFact(candidate, match);
+  const inference = defaultInference(match);
+  const evidenceKey = [
+    candidate.source_file,
+    candidate.source_type,
+    candidate.evidence_type,
+    candidate.normalized_value,
+    match.ruleId,
+    candidate.line_number ?? "",
+    itemConfidence,
+    candidate.redacted ? "redacted" : "plain"
+  ].join("\u0000");
+
+  return {
+    dedupeKey: evidenceKey,
+    item: {
+      evidence_id: `evidence:${stableHash(evidenceKey)}`,
+      source_file: candidate.source_file,
+      source_type: candidate.source_type,
+      evidence_type: candidate.evidence_type,
+      matched_value: candidate.normalized_value,
+      matched_rule_id: match.ruleId,
+      confidence: itemConfidence,
+      observed_fact: observedFact,
+      inference,
+      line_number: candidate.line_number ?? null,
+      redacted: candidate.redacted === true
+    }
+  };
+}
+
+function createFindingBucket(match) {
+  const vendorId = matchVendorId(match);
+  const initialEvidenceConfidence =
+    match.kind === "fingerprint" ? match.fingerprint.result.confidence : match.vendor?.scoring_defaults.evidence_confidence;
+
+  return {
+    finding_id: findingKey(match),
+    finding_type: findingType(match),
+    vendor_id: vendorId ?? null,
+    vendor_name: matchVendorName(match),
+    category: matchCategory(match),
+    verification_status: matchVerificationStatus(match),
+    scores: defaultScores(match, confidence(initialEvidenceConfidence)),
+    recommendations: defaultRecommendations(match),
+    observed_facts: [],
+    inferences: [],
+    unknowns: ["Production usage was not verified by the scanner."],
+    manual_review_recommended:
+      match.kind === "fingerprint" ? match.fingerprint.result.manual_review_recommended ?? true : true,
+    evidence: [],
+    alternatives: [],
+    limitations: defaultLimitations(match),
+    _evidenceKeys: new Set()
+  };
+}
+
+function finalizeFinding(bucket) {
+  const { _evidenceKeys, ...finding } = bucket;
+  finding.observed_facts = unique(finding.evidence.map((item) => item.observed_fact));
+  finding.inferences = unique(finding.evidence.map((item) => item.inference));
+  finding.recommendations = unique(finding.recommendations);
+  finding.limitations = unique(finding.limitations);
+  return finding;
+}
+
+function compareFindings(left, right) {
+  return left.finding_id.localeCompare(right.finding_id);
+}
+
+export function matchEvidenceCandidates(evidenceCandidates, options) {
+  const matcher = typeof options?.matchCandidate === "function" ? options : createVendorMatcher(options);
+  const buckets = new Map();
+
+  for (const candidate of evidenceCandidates) {
+    for (const match of matcher.matchCandidate(candidate)) {
+      const key = findingKey(match);
+      const bucket = buckets.get(key) ?? createFindingBucket(match);
+      const evidence = makeEvidenceItem(candidate, match);
+
+      if (!bucket._evidenceKeys.has(evidence.dedupeKey)) {
+        bucket._evidenceKeys.add(evidence.dedupeKey);
+        bucket.evidence.push(evidence.item);
+        bucket.scores.evidence_confidence = higherConfidence(bucket.scores.evidence_confidence, evidence.item.confidence);
+      }
+
+      buckets.set(key, bucket);
+    }
+  }
+
+  return [...buckets.values()].map(finalizeFinding).sort(compareFindings);
 }
