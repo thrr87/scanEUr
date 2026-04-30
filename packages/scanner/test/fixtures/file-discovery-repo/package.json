@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@sentry/nextjs": "latest"
+  },
+  "devDependencies": {
+    "react-ga4": "latest"
+  }
+}

@@ -1,6 +1,6 @@
 # @scaneur/scanner
 
-Reusable scanner engine package placeholder.
+Reusable scanner engine package.
 
 Responsibilities:
 
@@ -11,4 +11,5 @@ Responsibilities:
 - Scoring orchestration.
 - Structured scan result creation.
 
-Scanner implementation is intentionally not present in this scaffold.
+Current implementation includes deterministic MVP file discovery with default ignored
+directories, sensitive-file skips, env-template allowlisting, and file size limits.

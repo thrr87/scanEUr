@@ -5,13 +5,19 @@
   "description": "Reusable scanner engine package for scanEUr.",
   "license": "MIT",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "test": "node -e \"process.exit(0)\""
+    "test": "node test/file-discovery.test.mjs"
   },
   "dependencies": {
     "@scaneur/rules": "0.0.0",
