@@ -1,0 +1,20 @@
+name: Policy or methodology question
+description: Ask about methodology, wording, vendor inclusion, funding boundaries, or contribution policy.
+title: "[Policy]: "
+labels:
+  - policy
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What policy or methodology point needs clarification?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Link relevant files, vendor profiles, fingerprints, alternatives, or documentation.
+    validations:
+      required: false

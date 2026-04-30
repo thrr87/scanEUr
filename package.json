@@ -1,0 +1,20 @@
+{
+  "name": "scaneur",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Local-first dependency intelligence CLI scaffold for European software teams.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "npm@11.8.0",
+  "engines": {
+    "node": ">=20.18"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "node scripts/verify-scaffold.mjs && npm run test --workspaces --if-present",
+    "test:scaffold": "node scripts/verify-scaffold.mjs"
+  }
+}

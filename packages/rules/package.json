@@ -1,0 +1,19 @@
+{
+  "name": "@scaneur/rules",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Rule and local database loading package for scanEUr.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@scaneur/types": "0.0.0"
+  }
+}

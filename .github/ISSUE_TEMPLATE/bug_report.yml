@@ -1,0 +1,54 @@
+name: Bug report
+description: Report incorrect behavior, parser issues, CLI issues, or report output bugs.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets, private keys, production `.env` values, or exploitable vulnerability details.
+        Security and privacy vulnerabilities should use the private security reporting channel when available.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps or sanitized fixture content.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - Scanner
+        - Parser
+        - Reports
+        - Vendor profile
+        - Fingerprint
+        - Alternatives data
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed secrets, personal data, private paths, and production `.env` values from this report.
+          required: true

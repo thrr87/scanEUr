@@ -1,0 +1,24 @@
+{
+  "name": "@scaneur/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Command-line interface package for scanEUr.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "scaneur": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@scaneur/reports": "0.0.0",
+    "@scaneur/scanner": "0.0.0",
+    "@scaneur/types": "0.0.0"
+  }
+}

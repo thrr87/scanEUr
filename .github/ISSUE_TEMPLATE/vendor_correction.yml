@@ -1,0 +1,63 @@
+name: Vendor correction or dispute
+description: Request a correction to vendor, fingerprint, alternatives, or methodology data.
+title: "[Vendor correction]: "
+labels:
+  - vendor-data
+  - evidence-needed
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Vendor inclusion is not a legal, compliance, quality, or safety judgment.
+        Corrections should be evidence-first and avoid unsupported legal conclusions.
+  - type: input
+    id: vendor
+    attributes:
+      label: Vendor or profile ID
+      description: Use the stable vendor/profile ID where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current field or wording
+      description: Quote or summarize the current field that should change.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed correction
+      description: Use precise, conservative wording.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting evidence
+      description: Prefer official documentation, legal/subprocessor pages, product docs, API docs, package registries, or corporate pages.
+      placeholder: |
+        - Official source:
+        - Relevant excerpt or field:
+        - Date reviewed:
+    validations:
+      required: true
+  - type: dropdown
+    id: relationship
+    attributes:
+      label: Relationship to the vendor
+      options:
+        - No material relationship
+        - Employee, contractor, or advisor
+        - Customer or user
+        - Partner, investor, sponsor, or affiliate
+        - Prefer to disclose privately
+    validations:
+      required: true
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: Policy acknowledgement
+      options:
+        - label: This request is not for paid placement, paid ranking, affiliate treatment, sponsored recommendation, or suppression of accurate evidence.
+          required: true
