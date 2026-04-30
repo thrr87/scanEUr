@@ -388,6 +388,10 @@ function higherConfidence(left, right) {
   return CONFIDENCE_RANK[confidence(left)] >= CONFIDENCE_RANK[confidence(right)] ? confidence(left) : confidence(right);
 }
 
+function lowerConfidence(left, right) {
+  return CONFIDENCE_RANK[confidence(left)] <= CONFIDENCE_RANK[confidence(right)] ? confidence(left) : confidence(right);
+}
+
 function stableHash(value) {
   let hash = 5381;
   for (let index = 0; index < value.length; index += 1) {
@@ -440,18 +444,18 @@ function matchVendorName(match) {
 }
 
 function matchCategory(match) {
-  if (match.vendor) return match.vendor.category;
-  if (match.kind === "fingerprint") return match.fingerprint.result.candidate_category ?? "unknown";
+  if (match.kind === "vendor") return match.vendor.category;
+  if (match.kind === "fingerprint") return match.fingerprint.result.candidate_category ?? match.vendor?.category ?? "unknown";
   return "unknown";
 }
 
 function matchVerificationStatus(match) {
   if (match.kind === "vendor") return match.vendor.verification.status;
-  return match.vendor?.verification.status ?? match.fingerprint.verification_status;
+  return match.fingerprint.verification_status;
 }
 
 function defaultScores(match, evidenceConfidence) {
-  if (match.vendor) {
+  if (match.kind === "vendor") {
     return {
       ...match.vendor.scoring_defaults,
       evidence_confidence: evidenceConfidence
@@ -468,7 +472,7 @@ function defaultScores(match, evidenceConfidence) {
 }
 
 function defaultRecommendations(match) {
-  if (match.vendor) return match.vendor.recommendation_defaults.categories;
+  if (match.kind === "vendor") return match.vendor.recommendation_defaults.categories;
   return ["manual_review_required"];
 }
 
@@ -488,10 +492,13 @@ function findingType(match) {
 }
 
 function makeEvidenceItem(candidate, match) {
-  const itemConfidence = confidence(
-    candidate.confidence_hint,
-    match.kind === "fingerprint" ? match.fingerprint.result.confidence : match.vendor?.scoring_defaults.evidence_confidence
-  );
+  const itemConfidence =
+    match.kind === "fingerprint"
+      ? lowerConfidence(
+          confidence(candidate.confidence_hint, match.fingerprint.result.confidence),
+          match.fingerprint.result.confidence
+        )
+      : confidence(candidate.confidence_hint, match.vendor?.scoring_defaults.evidence_confidence);
   const observedFact = defaultObservedFact(candidate, match);
   const inference = defaultInference(match);
   const evidenceKey = [
@@ -549,6 +556,26 @@ function createFindingBucket(match) {
   };
 }
 
+function promoteBucketToKnownVendor(bucket, match) {
+  if (match.kind !== "vendor" || bucket.finding_type === "known_vendor") return bucket;
+
+  const evidenceConfidence = bucket.scores.evidence_confidence;
+  bucket.finding_type = "known_vendor";
+  bucket.vendor_id = match.vendor.id;
+  bucket.vendor_name = match.vendor.name;
+  bucket.category = match.vendor.category;
+  bucket.verification_status = match.vendor.verification.status;
+  bucket.scores = {
+    ...match.vendor.scoring_defaults,
+    evidence_confidence: evidenceConfidence
+  };
+  bucket.recommendations = unique([...bucket.recommendations, ...defaultRecommendations(match)]);
+  bucket.limitations = unique([...bucket.limitations, ...defaultLimitations(match)]);
+  bucket.manual_review_recommended = true;
+
+  return bucket;
+}
+
 function finalizeFinding(bucket) {
   const { _evidenceKeys, ...finding } = bucket;
   finding.observed_facts = unique(finding.evidence.map((item) => item.observed_fact));
@@ -569,7 +596,7 @@ export function matchEvidenceCandidates(evidenceCandidates, options) {
   for (const candidate of evidenceCandidates) {
     for (const match of matcher.matchCandidate(candidate)) {
       const key = findingKey(match);
-      const bucket = buckets.get(key) ?? createFindingBucket(match);
+      const bucket = promoteBucketToKnownVendor(buckets.get(key) ?? createFindingBucket(match), match);
       const evidence = makeEvidenceItem(candidate, match);
 
       if (!bucket._evidenceKeys.has(evidence.dedupeKey)) {

@@ -17,7 +17,7 @@
     "src"
   ],
   "scripts": {
-    "test": "node test/schema.test.mjs"
+    "test": "node test/schema.test.mjs && node test/fingerprint.test.mjs"
   },
   "dependencies": {
     "@scaneur/types": "0.0.0"
