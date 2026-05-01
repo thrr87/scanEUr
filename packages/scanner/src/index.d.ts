@@ -1,4 +1,12 @@
-import type { FileScanned, FileSkipped, Finding, UnknownCandidate } from "@scaneur/types";
+import type {
+  FileScanned,
+  FileSkipped,
+  Finding,
+  EvidenceItem,
+  RecommendationCategory,
+  ScoreDimensions,
+  UnknownCandidate
+} from "@scaneur/types";
 import type { VendorDatabase, FingerprintDatabase, VendorMatcher } from "@scaneur/rules";
 
 export type FileDiscoveryOptions = {
@@ -65,6 +73,17 @@ export const discoverSupportedFiles: typeof discoverFiles;
 export function parseEvidenceCandidates(input: ParseEvidenceInput): ParserResult;
 export const parseContent: typeof parseEvidenceCandidates;
 export function parseDiscoveredFile(targetPath: string, scannedFile: FileScanned): Promise<ParserResult>;
+export function recommendFromScores(
+  scores: ScoreDimensions,
+  options?: {
+    defaultRecommendations?: RecommendationCategory[];
+    category?: string;
+    findingType?: "known_vendor" | "fingerprint_only";
+    verificationStatus?: string;
+    vendorId?: string | null;
+    evidence?: EvidenceItem[];
+  }
+): RecommendationCategory[];
 export function matchEvidenceCandidates(
   evidenceCandidates: EvidenceCandidate[],
   options:

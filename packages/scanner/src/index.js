@@ -404,6 +404,163 @@ function unique(values) {
   return [...new Set(values.filter((value) => typeof value === "string" && value.trim() !== ""))];
 }
 
+const RECOMMENDATION_ORDER = Object.freeze([
+  "manual_review_required",
+  "configure_better",
+  "review_contractually",
+  "replace_now",
+  "strategic_migration_only",
+  "keep_for_now",
+  "monitor"
+]);
+
+const HIGH_REVIEW_SCORES = new Set(["high", "critical"]);
+const HIGH_EFFORT_SCORES = new Set(["high", "critical"]);
+const CRITICAL_OPERATION_CATEGORIES = new Set([
+  "auth",
+  "authentication",
+  "billing",
+  "database",
+  "data_storage",
+  "hosting",
+  "identity",
+  "infrastructure",
+  "payments",
+  "storage"
+]);
+const CONFIGURATION_REVIEW_CATEGORIES = new Set([
+  "analytics",
+  "marketing",
+  "tagging",
+  "telemetry",
+  "web_analytics"
+]);
+
+function scoreIsHigh(value) {
+  return HIGH_REVIEW_SCORES.has(value);
+}
+
+function scoreIsHighEffort(value) {
+  return HIGH_EFFORT_SCORES.has(value);
+}
+
+function scoringHasUnknown(scores) {
+  return [
+    scores.jurisdiction_signal,
+    scores.data_sensitivity_signal,
+    scores.operational_criticality,
+    scores.migration_effort,
+    scores.alternative_maturity
+  ].some((value) => value === "unknown");
+}
+
+function evidenceHasUnknownConfidence(evidence) {
+  return evidence.some((item) => item.confidence === "unknown");
+}
+
+function isCriticalOperation(scores, category) {
+  return scoreIsHigh(scores.operational_criticality) || CRITICAL_OPERATION_CATEGORIES.has(category);
+}
+
+function replaceNowIsSupported(scores, evidenceConfidence, category) {
+  return (
+    scoreIsHigh(scores.jurisdiction_signal) &&
+    scoreIsHigh(scores.data_sensitivity_signal) &&
+    scores.migration_effort === "low" &&
+    scores.alternative_maturity === "high" &&
+    evidenceConfidence === "high" &&
+    !isCriticalOperation(scores, category)
+  );
+}
+
+function recommendationSort(left, right) {
+  const leftIndex = RECOMMENDATION_ORDER.indexOf(left);
+  const rightIndex = RECOMMENDATION_ORDER.indexOf(right);
+  return (leftIndex === -1 ? RECOMMENDATION_ORDER.length : leftIndex) -
+    (rightIndex === -1 ? RECOMMENDATION_ORDER.length : rightIndex);
+}
+
+export function recommendFromScores(scores, options = {}) {
+  const category = String(options.category ?? "").toLowerCase();
+  const evidenceConfidence = confidence(scores?.evidence_confidence, "unknown");
+  const recommendations = new Set(unique(options.defaultRecommendations ?? []));
+  const highJurisdiction = scoreIsHigh(scores?.jurisdiction_signal);
+  const highDataSensitivity = scoreIsHigh(scores?.data_sensitivity_signal);
+  const highMigrationEffort = scoreIsHighEffort(scores?.migration_effort);
+  const criticalOperation = isCriticalOperation(scores ?? {}, category);
+  const unknownProfile =
+    options.findingType === "fingerprint_only" ||
+    options.verificationStatus === "unknown" ||
+    options.vendorId === null;
+  const unknownEvidence = evidenceHasUnknownConfidence(options.evidence ?? []);
+
+  if (
+    evidenceConfidence === "low" ||
+    evidenceConfidence === "unknown" ||
+    scoringHasUnknown(scores ?? {}) ||
+    unknownProfile ||
+    unknownEvidence
+  ) {
+    recommendations.add("manual_review_required");
+    recommendations.delete("replace_now");
+  }
+
+  if (highJurisdiction && highDataSensitivity) {
+    recommendations.add("review_contractually");
+  }
+
+  if (highJurisdiction && highDataSensitivity && scores?.migration_effort === "medium") {
+    recommendations.add("configure_better");
+  }
+
+  if (
+    CONFIGURATION_REVIEW_CATEGORIES.has(category) &&
+    highDataSensitivity &&
+    (scores?.alternative_maturity === "medium" || scores?.alternative_maturity === "high")
+  ) {
+    recommendations.add("configure_better");
+  }
+
+  if (criticalOperation) {
+    recommendations.add("review_contractually");
+    if (highMigrationEffort || scores?.alternative_maturity === "high") {
+      recommendations.add("strategic_migration_only");
+    }
+    recommendations.delete("replace_now");
+  }
+
+  if (!unknownEvidence && replaceNowIsSupported(scores ?? {}, evidenceConfidence, category)) {
+    recommendations.add("replace_now");
+    recommendations.add("configure_better");
+  } else {
+    recommendations.delete("replace_now");
+  }
+
+  if (recommendations.size === 0) {
+    recommendations.add(evidenceConfidence === "high" || evidenceConfidence === "medium" ? "monitor" : "manual_review_required");
+  }
+
+  if (recommendations.has("strategic_migration_only")) {
+    recommendations.delete("replace_now");
+  }
+
+  return [...recommendations].sort(recommendationSort);
+}
+
+function scoringUnknowns(scores, evidence = []) {
+  const unknowns = [];
+  if (scores.evidence_confidence === "low" || scores.evidence_confidence === "unknown") {
+    unknowns.push("Evidence is insufficient for a strong recommendation.");
+  }
+  if (evidenceHasUnknownConfidence(evidence)) {
+    unknowns.push("At least one evidence item has unknown confidence.");
+  }
+  if (scoringHasUnknown(scores)) {
+    unknowns.push("One or more scoring dimensions could not be classified from local evidence.");
+  }
+  return unknowns;
+}
+
 function evidenceNoun(evidenceType) {
   return {
     package_name: "package",
@@ -580,7 +737,17 @@ function finalizeFinding(bucket) {
   const { _evidenceKeys, ...finding } = bucket;
   finding.observed_facts = unique(finding.evidence.map((item) => item.observed_fact));
   finding.inferences = unique(finding.evidence.map((item) => item.inference));
-  finding.recommendations = unique(finding.recommendations);
+  finding.recommendations = recommendFromScores(finding.scores, {
+    defaultRecommendations: finding.recommendations,
+    category: finding.category,
+    findingType: finding.finding_type,
+    verificationStatus: finding.verification_status,
+    vendorId: finding.vendor_id,
+    evidence: finding.evidence
+  });
+  finding.manual_review_recommended =
+    finding.manual_review_recommended || finding.recommendations.includes("manual_review_required");
+  finding.unknowns = unique([...finding.unknowns, ...scoringUnknowns(finding.scores, finding.evidence)]);
   finding.limitations = unique(finding.limitations);
   return finding;
 }
