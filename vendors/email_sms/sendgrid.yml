@@ -1,0 +1,90 @@
+id: sendgrid
+name: SendGrid
+category: email_sms
+secondary_categories:
+  - email
+  - transactional_email
+aliases:
+  - Twilio SendGrid
+website: "https://sendgrid.com"
+identifiers:
+  domains:
+    - sendgrid.com
+    - api.sendgrid.com
+  packages:
+    npm:
+      - '@sendgrid/mail'
+      - '@sendgrid/client'
+    pypi:
+      - sendgrid
+    other: []
+  env_patterns:
+    - '^SENDGRID_'
+  docker_images: []
+  github_actions: []
+  config_files: []
+  terraform_providers: []
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Email delivery review should include current vendor legal docs, subprocessors, and routing behavior."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control is not asserted by this draft."
+data_categories:
+  likely_personal_data: high
+  common_data_types:
+    - email address
+    - message content
+    - templates
+    - delivery events
+    - IP address
+  sensitive_data_possible: true
+  data_notes: "Transactional email can include sensitive content depending on template and payload design."
+common_use_cases:
+  - transactional email
+  - email delivery
+  - marketing email
+operational_criticality_default: high
+migration_effort_default: medium
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: high
+  operational_criticality: high
+  migration_effort: medium
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - configure_better
+    - monitor
+  notes: "Review message payloads, suppression lists, retention, event webhooks, and contractual terms."
+evidence_sources:
+  - title: SendGrid documentation
+    url: "https://docs.sendgrid.com"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - API documentation
+    retrieved_at: unknown
+  - title: SendGrid mail package
+    url: "https://www.npmjs.com/package/@sendgrid/mail"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "An API key does not prove production email traffic."
+  - "Message content and webhook configuration determine much of the data sensitivity."
+notes: "Email provider findings should include payload review."
+schema_version: "0.1"

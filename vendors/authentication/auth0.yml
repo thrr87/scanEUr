@@ -1,0 +1,92 @@
+id: auth0
+name: Auth0
+category: authentication
+secondary_categories:
+  - identity_provider
+aliases:
+  - Auth0 by Okta
+  - Okta Auth0
+website: "https://auth0.com"
+identifiers:
+  domains:
+    - auth0.com
+    - cdn.auth0.com
+  packages:
+    npm:
+      - '@auth0/auth0-react'
+      - '@auth0/nextjs-auth0'
+      - auth0
+    pypi:
+      - auth0-python
+    other: []
+  env_patterns:
+    - '^AUTH0_'
+  docker_images: []
+  github_actions: []
+  config_files: []
+  terraform_providers:
+    - auth0
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Identity provider jurisdiction and tenant residency require current vendor documentation and human review."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control is not asserted by this draft."
+data_categories:
+  likely_personal_data: high
+  common_data_types:
+    - email address
+    - user identifiers
+    - authentication events
+    - IP address
+    - profile attributes
+  sensitive_data_possible: true
+  data_notes: "Authentication systems can process sensitive account and access data depending on tenant configuration."
+common_use_cases:
+  - authentication
+  - identity management
+  - single sign-on
+operational_criticality_default: critical
+migration_effort_default: high
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: high
+  operational_criticality: critical
+  migration_effort: high
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - configure_better
+    - strategic_migration_only
+  notes: "Authentication migrations are strategic. Review tenant region, logs, identity data, and lock-in."
+evidence_sources:
+  - title: Auth0 documentation
+    url: "https://auth0.com/docs"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - SDK identifiers
+    retrieved_at: unknown
+  - title: Auth0 React SDK package
+    url: "https://www.npmjs.com/package/@auth0/auth0-react"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "SDK presence does not prove active authentication traffic."
+  - "Identity provider configuration can materially change data and operational risk."
+notes: "Authentication findings should be treated as high-impact manual review items."
+schema_version: "0.1"

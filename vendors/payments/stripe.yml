@@ -1,0 +1,96 @@
+id: stripe
+name: Stripe
+category: payments
+secondary_categories:
+  - billing
+  - checkout
+aliases:
+  - Stripe Payments
+  - Stripe Checkout
+  - Stripe Billing
+website: "https://stripe.com"
+identifiers:
+  domains:
+    - stripe.com
+    - api.stripe.com
+    - checkout.stripe.com
+    - js.stripe.com
+  packages:
+    npm:
+      - stripe
+      - '@stripe/stripe-js'
+      - '@stripe/react-stripe-js'
+    pypi:
+      - stripe
+    other: []
+  env_patterns:
+    - '^STRIPE_'
+  docker_images: []
+  github_actions: []
+  config_files: []
+  terraform_providers:
+    - stripe
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Payments require contractual, regulatory, tax, and data-transfer review. No jurisdiction conclusion is asserted in this draft."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control signals require current corporate evidence and human review before verification."
+data_categories:
+  likely_personal_data: high
+  common_data_types:
+    - payment data
+    - customer identifiers
+    - email address
+    - billing address
+    - transaction metadata
+  sensitive_data_possible: true
+  data_notes: "Actual data categories depend on integration mode, payment method, and business workflow."
+common_use_cases:
+  - payments
+  - subscriptions
+  - checkout
+  - invoicing
+operational_criticality_default: high
+migration_effort_default: high
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: high
+  operational_criticality: high
+  migration_effort: high
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - strategic_migration_only
+  notes: "Payment processors are usually strategic dependencies. Review contracts, chargebacks, tax, payment methods, and product flows."
+evidence_sources:
+  - title: Stripe documentation
+    url: "https://docs.stripe.com"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - official documentation
+    retrieved_at: unknown
+  - title: Stripe JavaScript package
+    url: "https://www.npmjs.com/package/@stripe/stripe-js"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "A package or env var may indicate planned integration rather than production payment processing."
+  - "This profile does not assess processor role, transfer mechanism, or compliance."
+notes: "Treat payment findings as high-context review items."
+schema_version: "0.1"

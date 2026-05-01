@@ -1,2 +1,90 @@
-# Placeholder fingerprint database file.
-fingerprints: []
+fingerprints:
+  - id: fingerprint_domain_stripe_api
+    verification_status: agent_draft
+    rule_type: domain
+    match:
+      domains:
+        - api.stripe.com
+        - checkout.stripe.com
+        - js.stripe.com
+    result:
+      vendor_id: stripe
+      candidate_category: payments
+      confidence: high
+      evidence_label: Stripe API or checkout domain
+      observed_fact: "A Stripe API, checkout, or JavaScript domain was found."
+      inference: "The project may integrate with Stripe payment flows."
+      manual_review_recommended: true
+    limitations:
+      - "A domain reference can be documentation, tests, or unused configuration."
+    schema_version: "0.1"
+  - id: fingerprint_domain_ga4_tags
+    verification_status: agent_draft
+    rule_type: domain
+    match:
+      domains:
+        - www.googletagmanager.com
+        - www.google-analytics.com
+        - analytics.google.com
+    result:
+      vendor_id: ga4
+      candidate_category: analytics
+      confidence: high
+      evidence_label: Google Analytics or tag manager domain
+      observed_fact: "A Google Analytics or tag manager domain was found."
+      inference: "The project may use Google Analytics or Google tagging."
+      manual_review_recommended: true
+    limitations:
+      - "Tag manager domains can also be used for products other than GA4."
+    schema_version: "0.1"
+  - id: fingerprint_domain_openai_api
+    verification_status: agent_draft
+    rule_type: domain
+    match:
+      domains:
+        - api.openai.com
+    result:
+      vendor_id: openai
+      candidate_category: ai_api
+      confidence: high
+      evidence_label: OpenAI API domain
+      observed_fact: "The api.openai.com domain was found."
+      inference: "The project may call OpenAI APIs."
+      manual_review_recommended: true
+    limitations:
+      - "A domain reference does not reveal prompt contents or runtime usage."
+    schema_version: "0.1"
+  - id: fingerprint_domain_sendgrid_api
+    verification_status: agent_draft
+    rule_type: domain
+    match:
+      domains:
+        - api.sendgrid.com
+    result:
+      vendor_id: sendgrid
+      candidate_category: email_sms
+      confidence: high
+      evidence_label: SendGrid API domain
+      observed_fact: "The api.sendgrid.com domain was found."
+      inference: "The project may send email through SendGrid."
+      manual_review_recommended: true
+    limitations:
+      - "A domain reference can be unused or only present in examples."
+    schema_version: "0.1"
+  - id: fingerprint_domain_vercel_app
+    verification_status: agent_draft
+    rule_type: domain
+    match:
+      domains:
+        - vercel.app
+    result:
+      vendor_id: vercel
+      candidate_category: deployment_platform
+      confidence: medium
+      evidence_label: Vercel app domain
+      observed_fact: "A vercel.app domain was found."
+      inference: "The project may reference a Vercel-hosted deployment."
+      manual_review_recommended: true
+    limitations:
+      - "A vercel.app domain can reference another project or environment."
+    schema_version: "0.1"

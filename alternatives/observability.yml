@@ -1,2 +1,118 @@
-# Placeholder alternatives database file.
-alternatives: []
+alternatives:
+  - id: alt_sentry_glitchtip
+    source:
+      vendor_id: sentry
+      category: observability
+      use_case: error_tracking
+    alternative:
+      vendor_id: null
+      name: GlitchTip
+      type: open_source
+      website: "https://glitchtip.com"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: medium
+      migration_effort: medium
+      alternative_maturity: medium
+    hosting:
+      self_hosting_option: true
+      managed_option: true
+      operational_burden: medium
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on self-hosting choice or managed hosting configuration."
+      ownership_notes: "Review current project and company details before verified publication."
+    usage_guidance:
+      best_fit_cases:
+        - "Error tracking use cases that can accept partial Sentry compatibility."
+        - "Teams wanting a self-hosted option."
+      poor_fit_cases:
+        - "Teams deeply dependent on full Sentry platform features."
+      known_gaps:
+        - "May not match all Sentry performance, profiling, or release health features."
+      migration_notes:
+        - "Validate SDK compatibility, source maps, alerting, and issue workflow before switching."
+      configuration_notes:
+        - "Review data scrubbing, retention, and alert routing."
+    ranking:
+      methodology_basis:
+        - feature_fit
+        - self_hosting_option
+        - migration_effort
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: GlitchTip product site
+        url: "https://glitchtip.com"
+        source_type: official
+        supports:
+          - product identity
+          - error tracking use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Suitability depends on Sentry feature usage and operational capacity."
+    schema_version: "0.1"
+  - id: alt_observability_opentelemetry_prometheus
+    source:
+      vendor_id: null
+      category: observability
+      use_case: telemetry_and_metrics
+    alternative:
+      vendor_id: null
+      name: OpenTelemetry Collector with Prometheus
+      type: open_source
+      website: "https://opentelemetry.io"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: high
+      migration_effort: high
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: true
+      managed_option: false
+      operational_burden: high
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on deployment and storage location."
+      ownership_notes: "Open-source project governance and hosting provider require separate review."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams with platform engineering capacity and metrics-first observability needs."
+      poor_fit_cases:
+        - "Teams needing hosted error tracking workflows with minimal operations."
+      known_gaps:
+        - "Not a drop-in replacement for SaaS issue tracking workflows."
+      migration_notes:
+        - "Design telemetry pipelines, storage, alerting, dashboards, and retention before migration."
+      configuration_notes:
+        - "Review sampling, PII scrubbing, labels, retention, and access controls."
+    ranking:
+      methodology_basis:
+        - open_source
+        - maturity
+        - operational_burden
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: OpenTelemetry project site
+        url: "https://opentelemetry.io"
+        source_type: official
+        supports:
+          - product identity
+          - telemetry use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "This is an architectural alternative, not a single SaaS drop-in."
+    schema_version: "0.1"

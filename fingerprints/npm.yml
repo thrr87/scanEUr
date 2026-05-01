@@ -1,2 +1,137 @@
-# Placeholder fingerprint database file.
-fingerprints: []
+fingerprints:
+  - id: fingerprint_npm_ga4_react_ga4
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: react-ga4
+    result:
+      vendor_id: ga4
+      candidate_category: analytics
+      confidence: high
+      evidence_label: Google Analytics 4 npm package
+      observed_fact: "The react-ga4 package was found."
+      inference: "The project may integrate with Google Analytics 4."
+      manual_review_recommended: true
+    limitations:
+      - "A package match may indicate planned or unused analytics integration."
+    schema_version: "0.1"
+  - id: fingerprint_npm_stripe_react_stripe_js
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@stripe/react-stripe-js'
+    result:
+      vendor_id: stripe
+      candidate_category: payments
+      confidence: high
+      evidence_label: Stripe React SDK package
+      observed_fact: "The @stripe/react-stripe-js package was found."
+      inference: "The project may integrate with Stripe payment flows."
+      manual_review_recommended: true
+    limitations:
+      - "Payment processing and production usage require implementation review."
+    schema_version: "0.1"
+  - id: fingerprint_npm_sentry_nextjs
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@sentry/nextjs'
+    result:
+      vendor_id: sentry
+      candidate_category: observability
+      confidence: high
+      evidence_label: Sentry Next.js SDK package
+      observed_fact: "The @sentry/nextjs package was found."
+      inference: "The project may send error or performance telemetry to Sentry."
+      manual_review_recommended: true
+    limitations:
+      - "Telemetry payloads and enabled environments require configuration review."
+    schema_version: "0.1"
+  - id: fingerprint_npm_vercel_analytics
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@vercel/analytics'
+    result:
+      vendor_id: vercel
+      candidate_category: analytics
+      confidence: high
+      evidence_label: Vercel Analytics package
+      observed_fact: "The @vercel/analytics package was found."
+      inference: "The project may use Vercel Analytics."
+      manual_review_recommended: true
+    limitations:
+      - "Analytics collection depends on runtime configuration and deployment."
+    schema_version: "0.1"
+  - id: fingerprint_npm_openai_sdk
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: openai
+    result:
+      vendor_id: openai
+      candidate_category: ai_api
+      confidence: high
+      evidence_label: OpenAI npm SDK
+      observed_fact: "The openai package was found."
+      inference: "The project may call OpenAI APIs."
+      manual_review_recommended: true
+    limitations:
+      - "SDK presence does not prove personal data is sent to an AI API."
+    schema_version: "0.1"
+  - id: fingerprint_npm_auth0_nextjs
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@auth0/nextjs-auth0'
+    result:
+      vendor_id: auth0
+      candidate_category: authentication
+      confidence: high
+      evidence_label: Auth0 Next.js SDK package
+      observed_fact: "The @auth0/nextjs-auth0 package was found."
+      inference: "The project may use Auth0 for authentication."
+      manual_review_recommended: true
+    limitations:
+      - "Tenant region, identity data, and production usage require manual review."
+    schema_version: "0.1"
+  - id: fingerprint_npm_sendgrid_mail
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@sendgrid/mail'
+    result:
+      vendor_id: sendgrid
+      candidate_category: email_sms
+      confidence: high
+      evidence_label: SendGrid mail package
+      observed_fact: "The @sendgrid/mail package was found."
+      inference: "The project may send transactional email through SendGrid."
+      manual_review_recommended: true
+    limitations:
+      - "Message payloads and production usage require review."
+    schema_version: "0.1"
+  - id: fingerprint_npm_supabase_js
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: npm
+      package_name: '@supabase/supabase-js'
+    result:
+      vendor_id: supabase
+      candidate_category: database
+      confidence: high
+      evidence_label: Supabase JavaScript client package
+      observed_fact: "The @supabase/supabase-js package was found."
+      inference: "The project may use Supabase services."
+      manual_review_recommended: true
+    limitations:
+      - "The package does not reveal whether managed, self-hosted, auth, storage, or database services are used."
+    schema_version: "0.1"

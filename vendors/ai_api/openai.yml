@@ -1,0 +1,90 @@
+id: openai
+name: OpenAI
+category: ai_api
+secondary_categories:
+  - llm_api
+aliases:
+  - OpenAI API
+  - ChatGPT API
+website: "https://openai.com"
+identifiers:
+  domains:
+    - api.openai.com
+    - openai.com
+  packages:
+    npm:
+      - openai
+    pypi:
+      - openai
+    other: []
+  env_patterns:
+    - '^OPENAI_API_KEY$'
+    - '^OPENAI_'
+  docker_images: []
+  github_actions: []
+  config_files: []
+  terraform_providers: []
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "AI API data handling and residency options require current product, enterprise, and legal documentation review."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control is not asserted in this draft."
+data_categories:
+  likely_personal_data: high
+  common_data_types:
+    - prompts
+    - generated content
+    - user identifiers
+    - logs
+  sensitive_data_possible: true
+  data_notes: "Sensitive data is possible if prompts, files, or tool outputs contain personal, confidential, or regulated information."
+common_use_cases:
+  - AI API
+  - embeddings
+  - chat completion
+  - content generation
+operational_criticality_default: medium
+migration_effort_default: medium
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: high
+  operational_criticality: medium
+  migration_effort: medium
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - configure_better
+    - monitor
+  notes: "Review prompt data, file uploads, retention controls, enterprise terms, and fallback behavior."
+evidence_sources:
+  - title: OpenAI API documentation
+    url: "https://platform.openai.com/docs"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - API documentation
+    retrieved_at: unknown
+  - title: OpenAI npm package
+    url: "https://www.npmjs.com/package/openai"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "An SDK or API key does not prove personal data is sent."
+  - "Model provider configuration, retention, and enterprise terms can change the review outcome."
+notes: "AI API findings should trigger prompt and data minimization review."
+schema_version: "0.1"

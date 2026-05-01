@@ -16,6 +16,10 @@ import {
   validFingerprint,
   validVendorProfile
 } from "../../types/test/fixtures.mjs";
+import {
+  validateSeedCollections,
+  validateSeedDatabase
+} from "../../../scripts/validate-database.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -37,6 +41,34 @@ const alternatives = await loadAlternativesDatabase(repoRoot);
 assert.equal(Array.isArray(vendors.vendors), true);
 assert.equal(Array.isArray(fingerprints.fingerprints), true);
 assert.equal(Array.isArray(alternatives.alternatives), true);
+assert.ok(vendors.vendors.length >= 8, "repository seed database should include common vendor profiles");
+assert.ok(fingerprints.fingerprints.length >= 8, "repository seed database should include common fingerprints");
+assert.ok(alternatives.alternatives.length >= 6, "repository seed database should include initial alternatives");
+
+const seedValidation = await validateSeedDatabase(repoRoot);
+assert.equal(
+  seedValidation.success,
+  true,
+  `repository seed database should pass governance validation:\n${formatRuleValidationErrors(seedValidation.errors)}`
+);
+
+const promotedFingerprintDatabase = clone(fingerprints);
+promotedFingerprintDatabase.fingerprints[0].verification_status = "partially_verified";
+assertInvalid(
+  "seed fingerprint promoted without review metadata",
+  validateSeedCollections(vendors, promotedFingerprintDatabase, alternatives),
+  "fingerprints\\[0\\].verification_status",
+  "agent_draft"
+);
+
+const alternativeControlClaimDatabase = clone(alternatives);
+alternativeControlClaimDatabase.alternatives[0].control_notes.eu_or_european_control_signal = "high";
+assertInvalid(
+  "seed alternative control claim without review metadata",
+  validateSeedCollections(vendors, fingerprints, alternativeControlClaimDatabase),
+  "alternatives\\[0\\].control_notes",
+  "human review"
+);
 
 const verifiedWithoutReviewDate = clone(validVendorProfile);
 verifiedWithoutReviewDate.verification.status = "verified";

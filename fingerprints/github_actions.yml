@@ -1,2 +1,17 @@
-# Placeholder fingerprint database file.
-fingerprints: []
+fingerprints:
+  - id: fingerprint_github_action_cloudflare_wrangler
+    verification_status: agent_draft
+    rule_type: github_action
+    match:
+      action: cloudflare/wrangler-action
+    result:
+      vendor_id: cloudflare
+      candidate_category: cloud_infrastructure
+      confidence: high
+      evidence_label: Cloudflare Wrangler GitHub Action
+      observed_fact: "The cloudflare/wrangler-action GitHub Action was found."
+      inference: "The project may deploy to Cloudflare through GitHub Actions."
+      manual_review_recommended: true
+    limitations:
+      - "Workflow presence does not prove the action is currently used for production deployment."
+    schema_version: "0.1"

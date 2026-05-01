@@ -1,0 +1,92 @@
+id: ga4
+name: Google Analytics 4
+category: analytics
+secondary_categories:
+  - web_analytics
+  - marketing_measurement
+aliases:
+  - Google Analytics
+  - GA4
+  - gtag
+website: "https://analytics.google.com"
+identifiers:
+  domains:
+    - analytics.google.com
+    - www.googletagmanager.com
+    - www.google-analytics.com
+  packages:
+    npm:
+      - react-ga4
+    pypi: []
+    other: []
+  env_patterns:
+    - '^GA_MEASUREMENT_ID$'
+    - '^GOOGLE_ANALYTICS_'
+  docker_images: []
+  github_actions: []
+  config_files: []
+  terraform_providers: []
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Jurisdiction, transfer, and data residency claims require human legal and vendor documentation review."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership and control are not asserted in this draft. Review current corporate documentation before promotion."
+data_categories:
+  likely_personal_data: high
+  common_data_types:
+    - IP address
+    - device identifiers
+    - usage events
+    - page URLs
+  sensitive_data_possible: unknown
+  data_notes: "Actual data depends on implementation, consent mode, event payloads, and configuration."
+common_use_cases:
+  - web analytics
+  - marketing measurement
+  - advertising attribution
+operational_criticality_default: medium
+migration_effort_default: medium
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: high
+  operational_criticality: medium
+  migration_effort: medium
+  alternative_maturity: high
+  evidence_confidence: medium
+recommendation_defaults:
+  categories:
+    - configure_better
+    - review_contractually
+    - monitor
+  notes: "Analytics integrations should be reviewed for consent, event payloads, retention, and advertising linkage."
+evidence_sources:
+  - title: Google Analytics product site
+    url: "https://analytics.google.com"
+    source_type: official
+    supports:
+      - vendor identity
+      - official product domain
+    retrieved_at: unknown
+  - title: Google tag documentation
+    url: "https://developers.google.com/tag-platform/gtagjs"
+    source_type: documentation
+    supports:
+      - common tag domains
+      - implementation identifiers
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "A measurement ID or package match may indicate planned integration rather than production tracking."
+  - "This draft does not determine compliance, legality, or transfer impact."
+notes: "Use as a detection and review-support profile only."
+schema_version: "0.1"

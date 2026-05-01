@@ -14,7 +14,8 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "node scripts/verify-scaffold.mjs && npm run test --workspaces --if-present",
+    "test": "node scripts/test.mjs",
+    "test:database": "node scripts/validate-database.mjs",
     "test:scaffold": "node scripts/verify-scaffold.mjs"
   }
 }

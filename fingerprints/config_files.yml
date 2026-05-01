@@ -1,2 +1,71 @@
-# Placeholder fingerprint database file.
-fingerprints: []
+fingerprints:
+  - id: fingerprint_config_vercel_json
+    verification_status: agent_draft
+    rule_type: config_file
+    match:
+      paths:
+        - vercel.json
+    result:
+      vendor_id: vercel
+      candidate_category: deployment_platform
+      confidence: high
+      evidence_label: Vercel configuration file
+      observed_fact: "A vercel.json configuration file was found."
+      inference: "The project may be configured for Vercel deployment."
+      manual_review_recommended: true
+    limitations:
+      - "Configuration files can remain after a migration away from a platform."
+    schema_version: "0.1"
+  - id: fingerprint_config_wrangler_toml
+    verification_status: agent_draft
+    rule_type: config_file
+    match:
+      paths:
+        - wrangler.toml
+        - wrangler.json
+    result:
+      vendor_id: cloudflare
+      candidate_category: cloud_infrastructure
+      confidence: high
+      evidence_label: Cloudflare Wrangler configuration file
+      observed_fact: "A Wrangler configuration file was found."
+      inference: "The project may be configured for Cloudflare Workers or Pages."
+      manual_review_recommended: true
+    limitations:
+      - "Configuration files can be local-only or stale."
+    schema_version: "0.1"
+  - id: fingerprint_config_sentry
+    verification_status: agent_draft
+    rule_type: config_file
+    match:
+      paths:
+        - sentry.properties
+        - .sentryclirc
+    result:
+      vendor_id: sentry
+      candidate_category: observability
+      confidence: high
+      evidence_label: Sentry configuration file
+      observed_fact: "A Sentry configuration file was found."
+      inference: "The project may be configured for Sentry release or telemetry workflows."
+      manual_review_recommended: true
+    limitations:
+      - "Release configuration does not prove runtime telemetry is active."
+    schema_version: "0.1"
+  - id: fingerprint_config_supabase
+    verification_status: agent_draft
+    rule_type: config_file
+    match:
+      paths:
+        - supabase/config.toml
+    result:
+      vendor_id: supabase
+      candidate_category: database
+      confidence: high
+      evidence_label: Supabase project configuration file
+      observed_fact: "A supabase/config.toml file was found."
+      inference: "The project may use Supabase local or managed services."
+      manual_review_recommended: true
+    limitations:
+      - "Local Supabase tooling does not reveal managed production usage."
+    schema_version: "0.1"

@@ -1,5 +1,7 @@
 # Detection Fingerprints
 
-Placeholder directory for lightweight local detection fingerprints.
+Lightweight local detection fingerprints.
 
-These files are intentionally empty seed files. They define the expected database shape without adding scanner logic or curated detections yet.
+Fingerprints map package names, domains, environment variables, config files, Docker images, GitHub Actions, and Terraform providers to vendor review candidates. A match is evidence for review, not proof of production usage.
+
+Draft fingerprints should remain `agent_draft` unless manually reviewed. Unknown or ambiguous matches should keep manual review enabled.

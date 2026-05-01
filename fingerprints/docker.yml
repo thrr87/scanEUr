@@ -1,2 +1,35 @@
-# Placeholder fingerprint database file.
-fingerprints: []
+fingerprints:
+  - id: fingerprint_docker_sentry
+    verification_status: agent_draft
+    rule_type: docker_image
+    match:
+      image_patterns:
+        - getsentry/sentry
+    result:
+      vendor_id: sentry
+      candidate_category: observability
+      confidence: medium
+      evidence_label: Sentry Docker image
+      observed_fact: "A getsentry/sentry Docker image was found."
+      inference: "The project may run or evaluate self-hosted Sentry."
+      manual_review_recommended: true
+    limitations:
+      - "Docker references can be examples, local tooling, or unused compose services."
+    schema_version: "0.1"
+  - id: fingerprint_docker_supabase_namespace
+    verification_status: agent_draft
+    rule_type: docker_image
+    match:
+      image_patterns:
+        - supabase/*
+    result:
+      vendor_id: supabase
+      candidate_category: database
+      confidence: medium
+      evidence_label: Supabase Docker image namespace
+      observed_fact: "A Supabase Docker image namespace was found."
+      inference: "The project may run or evaluate Supabase services."
+      manual_review_recommended: true
+    limitations:
+      - "Supabase Docker usage may be local development, testing, or self-hosting."
+    schema_version: "0.1"

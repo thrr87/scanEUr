@@ -1,5 +1,11 @@
 # Alternatives
 
-Placeholder directory for the local alternatives database.
+Local seed alternatives database.
 
-These files are intentionally empty seed files. Alternatives will be curated separately from package and scanner implementation.
+Alternatives are use-case dependent and are not universal recommendations. Rankings must be methodology-based only: no affiliate links, no sponsored placement, and no paid ranking fields.
+
+Run database validation with:
+
+```bash
+npm test -- --run database
+```
