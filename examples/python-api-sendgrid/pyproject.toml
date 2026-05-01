@@ -3,5 +3,5 @@ name = "python-api-sendgrid-fixture"
 version = "0.0.0"
 dependencies = [
   "sendgrid==6.11.0",
-  "requests==2.32.3"
+  "requests==2.33.0"
 ]
