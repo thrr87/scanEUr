@@ -65,6 +65,24 @@ assertInvalid(
   "verified vendor profiles require"
 );
 
+const verifiedProfileWithoutReviewDate = clone(validVendorProfile);
+verifiedProfileWithoutReviewDate.verification.status = "verified";
+verifiedProfileWithoutReviewDate.evidence_sources = [
+  {
+    title: "Fixture vendor docs",
+    url: "https://example.invalid/docs",
+    source_type: "official",
+    supports: ["Fixture validation only."],
+    retrieved_at: "2026-04-30"
+  }
+];
+assertInvalid(
+  "verified profile without concrete review date",
+  validateVendorProfile(verifiedProfileWithoutReviewDate),
+  "verification.last_reviewed",
+  "concrete last_reviewed date"
+);
+
 const invalidReviewedDate = clone(validVendorProfile);
 invalidReviewedDate.verification.last_reviewed = "2026-02-30";
 assertInvalid(

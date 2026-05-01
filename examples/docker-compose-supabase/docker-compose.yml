@@ -1,0 +1,7 @@
+services:
+  db:
+    image: supabase/postgres:15.1.0.147
+  auth:
+    image: ghcr.io/supabase/gotrue:v2.158.1
+  cache:
+    image: redis:7-alpine

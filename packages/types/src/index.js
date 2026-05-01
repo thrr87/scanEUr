@@ -509,6 +509,9 @@ export function validateVendorProfile(input) {
   if (input.verification?.status === "verified" && input.evidence_sources?.length === 0) {
     ctx.add("evidence_sources", "verified vendor profiles require at least one evidence source");
   }
+  if (input.verification?.status === "verified" && input.verification.last_reviewed === "unknown") {
+    ctx.add("verification.last_reviewed", "verified vendor profiles require a concrete last_reviewed date");
+  }
   stringArray(ctx, input.limitations, "limitations");
   string(ctx, input.notes, "notes", { allowEmpty: true });
   string(ctx, input.schema_version, "schema_version");

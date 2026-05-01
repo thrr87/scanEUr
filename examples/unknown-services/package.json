@@ -1,0 +1,7 @@
+{
+  "name": "unknown-services-fixture",
+  "private": true,
+  "dependencies": {
+    "cloud-utils": "1.0.0"
+  }
+}

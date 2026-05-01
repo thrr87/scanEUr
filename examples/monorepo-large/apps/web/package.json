@@ -1,0 +1,9 @@
+{
+  "name": "@fixture/web",
+  "private": true,
+  "dependencies": {
+    "@sentry/nextjs": "8.31.0",
+    "@stripe/stripe-js": "4.6.0",
+    "react-ga4": "2.1.0"
+  }
+}

@@ -1,0 +1,5 @@
+services:
+  db:
+    image: supabase/postgres:15.1.0.147
+  worker:
+    image: node:20-alpine

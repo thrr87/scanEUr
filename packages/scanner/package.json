@@ -21,9 +21,10 @@
     "src"
   ],
   "scripts": {
-    "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs && node test/matcher.test.mjs && node test/fingerprint.test.mjs && node test/unknown.test.mjs && node test/scoring.test.mjs"
+    "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs && node test/matcher.test.mjs && node test/fingerprint.test.mjs && node test/unknown.test.mjs && node test/scoring.test.mjs && node test/mvp-fixtures.test.mjs"
   },
   "dependencies": {
+    "@scaneur/reports": "0.0.0",
     "@scaneur/rules": "0.0.0",
     "@scaneur/types": "0.0.0"
   }

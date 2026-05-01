@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: unknown-services-fixture
+    env: node
+    routes:
+      - type: rewrite
+        source: /events/*
+        destination: https://collector.acme-observer.test/*

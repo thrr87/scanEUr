@@ -1,0 +1,11 @@
+{
+  "name": "monorepo-large-fixture",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@sentry/node": "8.31.0"
+  }
+}

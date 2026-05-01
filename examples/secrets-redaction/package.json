@@ -1,0 +1,7 @@
+{
+  "name": "secrets-redaction-fixture",
+  "private": true,
+  "dependencies": {
+    "@stripe/stripe-js": "4.6.0"
+  }
+}
