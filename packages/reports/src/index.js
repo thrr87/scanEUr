@@ -64,6 +64,54 @@ export function renderMarkdownReport(scanResultOrReport, options = {}) {
   return `${lines.join("\n").replace(/\n{3,}/g, "\n\n").trimEnd()}\n`;
 }
 
+export function renderJsonReport(scanResultOrReport, options = {}) {
+  const report = sanitizeReportForJson(toReport(scanResultOrReport, options));
+  return `${JSON.stringify(report, null, 2)}\n`;
+}
+
+export const renderJSONReport = renderJsonReport;
+
+function sanitizeReportForJson(report) {
+  const sanitized = sanitizeJsonValue(report);
+  const findings = sanitized.findings.map((finding, findingIndex) => ({
+    ...finding,
+    evidence: finding.evidence.map((item, itemIndex) => {
+      const originalItem = report.findings[findingIndex]?.evidence?.[itemIndex];
+      const originalMatchedValue = String(originalItem?.matched_value ?? item.matched_value ?? "");
+      const matchedValue = originalItem?.redacted
+        ? "[redacted]"
+        : redactSecretsInText(safeEvidenceValue(originalItem ?? item));
+      return {
+        ...item,
+        matched_value: matchedValue,
+        redacted: item.redacted || matchedValue !== originalMatchedValue
+      };
+    })
+  }));
+
+  return assertReport({
+    schema_version: sanitized.schema_version,
+    report_type: sanitized.report_type,
+    scan_metadata: sanitized.scan_metadata,
+    summary: sanitized.summary,
+    findings,
+    unknown_candidates: sanitized.unknown_candidates,
+    files_scanned: sanitized.files_scanned,
+    files_skipped: sanitized.files_skipped,
+    parser_warnings: sanitized.parser_warnings,
+    disclaimer: sanitized.disclaimer
+  });
+}
+
+function sanitizeJsonValue(value) {
+  if (typeof value === "string") return redactSecretsInText(value);
+  if (Array.isArray(value)) return value.map(sanitizeJsonValue);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, nestedValue]) => [key, sanitizeJsonValue(nestedValue)]));
+  }
+  return value;
+}
+
 function pushSection(lines, heading, body) {
   lines.push(heading, "");
   if (body.length === 0) {

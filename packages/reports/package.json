@@ -17,7 +17,7 @@
     "src"
   ],
   "scripts": {
-    "test": "node test/markdown-report.test.mjs"
+    "test": "node test/markdown-report.test.mjs && node test/json-report.test.mjs"
   },
   "dependencies": {
     "@scaneur/types": "0.0.0"

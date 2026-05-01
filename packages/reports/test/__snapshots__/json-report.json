@@ -1,0 +1,147 @@
+{
+  "schema_version": "0.1",
+  "report_type": "scaneur_report",
+  "scan_metadata": {
+    "scanner_version": "0.1.0",
+    "database_version": "2026.04.0",
+    "methodology_version": "0.1.0",
+    "scan_started_at": "2026-04-30T10:00:00Z",
+    "scan_completed_at": "2026-04-30T10:00:01Z",
+    "scan_mode": "local_offline",
+    "target_path": ".",
+    "files_scanned_count": 1,
+    "files_skipped_count": 1
+  },
+  "summary": {
+    "detected_vendor_count": 1,
+    "unknown_candidate_count": 1,
+    "high_priority_review_count": 1,
+    "quick_win_count": 1,
+    "strategic_dependency_count": 1
+  },
+  "findings": [
+    {
+      "finding_id": "vendor:ga4",
+      "finding_type": "known_vendor",
+      "vendor_id": "ga4",
+      "vendor_name": "Google Analytics 4",
+      "category": "analytics",
+      "verification_status": "agent_draft",
+      "scores": {
+        "jurisdiction_signal": "high",
+        "data_sensitivity_signal": "high",
+        "operational_criticality": "high",
+        "migration_effort": "high",
+        "alternative_maturity": "high",
+        "evidence_confidence": "medium"
+      },
+      "recommendations": [
+        "configure_better",
+        "review_contractually",
+        "strategic_migration_only"
+      ],
+      "observed_facts": [
+        "The package `react-ga4` was found in `package.json`.",
+        "A parser warning included [redacted]."
+      ],
+      "inferences": [
+        "The project may integrate with Google Analytics."
+      ],
+      "unknowns": [
+        "Production usage was not verified by the scanner."
+      ],
+      "manual_review_recommended": true,
+      "evidence": [
+        {
+          "evidence_id": "ev_001",
+          "source_file": "package.json",
+          "source_type": "package_manifest",
+          "evidence_type": "package_name",
+          "matched_value": "react-ga4",
+          "matched_rule_id": "pkg_ga4_react",
+          "confidence": "high",
+          "observed_fact": "The package `react-ga4` was found in `package.json`.",
+          "inference": "The project may integrate with Google Analytics.",
+          "line_number": null,
+          "redacted": false
+        },
+        {
+          "evidence_id": "ev_secret",
+          "source_file": ".env.example",
+          "source_type": "env_template",
+          "evidence_type": "env_var",
+          "matched_value": "STRIPE_SECRET_KEY=[redacted]",
+          "matched_rule_id": "env_stripe_secret",
+          "confidence": "medium",
+          "observed_fact": "The environment variable key `STRIPE_SECRET_KEY` was found in `.env.example`.",
+          "inference": "The project may integrate with Stripe payments.",
+          "line_number": 2,
+          "redacted": true
+        }
+      ],
+      "alternatives": [
+        {
+          "alternative_id": "alt_ga4_matomo",
+          "name": "Matomo",
+          "replacement_type": "partial",
+          "fit_level": "high",
+          "maturity": "high",
+          "migration_effort": "medium",
+          "known_gaps": [
+            "May not match all GA4 advertising ecosystem integrations."
+          ]
+        }
+      ],
+      "limitations": [
+        "A package may indicate planned integration rather than production use."
+      ]
+    }
+  ],
+  "unknown_candidates": [
+    {
+      "candidate_id": "unknown:domain:api.example-service.test",
+      "candidate_type": "external_domain",
+      "normalized_value": "api.example-service.test",
+      "source_files": [
+        "vercel.json"
+      ],
+      "reason_flagged": "External-looking API domain did not match a known vendor profile or fingerprint.",
+      "evidence_confidence": "medium",
+      "manual_review_recommended": true,
+      "unsupported_claims": [
+        "vendor identity",
+        "jurisdiction",
+        "ownership/control",
+        "data processing role"
+      ],
+      "suggested_review_steps": [
+        "Identify the service owner.",
+        "Confirm whether the endpoint is used in production.",
+        "Check whether personal data is sent."
+      ]
+    }
+  ],
+  "files_scanned": [
+    {
+      "path": "package.json",
+      "file_type": "package_manifest",
+      "parser": "package_json",
+      "status": "scanned"
+    }
+  ],
+  "files_skipped": [
+    {
+      "path": ".env",
+      "reason": "sensitive_file_default_skip",
+      "configured_by_user": false
+    }
+  ],
+  "parser_warnings": [
+    {
+      "path": "package.json",
+      "parser": "package_json",
+      "message": "Invalid optional field was ignored while reading [redacted]"
+    }
+  ],
+  "disclaimer": "scanEUr is a technical dependency discovery and review-support tool. It does not provide legal advice, does not determine GDPR compliance or non-compliance, and does not declare any vendor legal or illegal. Findings are based on local file evidence, database profiles, and documented methodology. Manual review is recommended for high-impact decisions."
+}
