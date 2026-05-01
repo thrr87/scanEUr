@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const included = [
+  "`scan`, `explain`, `alternatives`, `init-policy`, and `check` commands.",
+  "Markdown and JSON reports.",
+  "Local vendor, fingerprint, and alternatives databases.",
+  "Known vendor detection and unknown candidate detection.",
+  "Separate scoring dimensions instead of a single global score.",
+  "Governance, methodology, privacy, security, funding, contribution, vendor inclusion, and no-affiliate policy docs."
+];
+
+const excluded = [
+  "Domain scanning.",
+  "Hosted service features.",
+  "Online enrichment.",
+  "HTML report output.",
+  "Telemetry.",
+  "Legal compliance verdicts."
+];
+---
+
+<BaseLayout title="Release notes" description="scanEUr release notes and MVP release scope.">
+  <PageIntro
+    title="Release notes"
+    lead="v0.1.0 is the Local CLI MVP release. It is intentionally scoped to local repository scanning and review-support reports."
+  />
+
+  <section class="page-content">
+    <div class="content-block">
+      <h2>v0.1.0 Local CLI MVP</h2>
+      <p>Release date: 2026-05-01.</p>
+      <p>
+        This release preserves the project trust boundaries: local-first operation,
+        offline default behavior, no telemetry, no source-code upload, no affiliate links,
+        and no paid ranking.
+      </p>
+    </div>
+
+    <div class="content-block">
+      <h2>Included</h2>
+      <ul class="plain-list">
+        {included.map((item) => <li set:html={item} />)}
+      </ul>
+    </div>
+
+    <div class="content-block">
+      <h2>Not included</h2>
+      <ul class="plain-list">
+        {excluded.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <Callout title="Release checks">
+      <p>Package version: 0.1.0. Scanner version: 0.1.0. Methodology version: 0.1.0. Database version: 2026.04.0.</p>
+      <p>The release test command is <code>npm test</code>.</p>
+    </Callout>
+  </section>
+</BaseLayout>

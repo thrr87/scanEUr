@@ -1,15 +1,15 @@
 {
   "name": "@scaneur/docs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Astro documentation site workspace for scanEUr.",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "test": "node test/docs-site.test.mjs"
+    "dev": "node scripts/astro.mjs dev",
+    "build": "node scripts/astro.mjs build",
+    "preview": "node scripts/astro.mjs preview",
+    "test": "node test/docs-site.test.mjs && npm run build"
   },
   "devDependencies": {
     "astro": "5.7.13"

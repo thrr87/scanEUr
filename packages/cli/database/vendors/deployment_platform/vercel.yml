@@ -1,0 +1,94 @@
+id: vercel
+name: Vercel
+category: deployment_platform
+secondary_categories:
+  - hosting_platform
+  - serverless
+aliases:
+  - Vercel Analytics
+  - Vercel Postgres
+website: "https://vercel.com"
+identifiers:
+  domains:
+    - vercel.com
+    - vercel.app
+  packages:
+    npm:
+      - vercel
+      - '@vercel/analytics'
+      - '@vercel/speed-insights'
+    pypi: []
+    other: []
+  env_patterns:
+    - '^VERCEL$'
+    - '^VERCEL_'
+  docker_images: []
+  github_actions: []
+  config_files:
+    - vercel.json
+  terraform_providers:
+    - vercel
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Hosting and deployment jurisdiction depends on service configuration and current platform documentation."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control is not asserted in this draft and requires human review."
+data_categories:
+  likely_personal_data: medium
+  common_data_types:
+    - logs
+    - IP address
+    - request metadata
+    - deployment metadata
+  sensitive_data_possible: true
+  data_notes: "Actual data depends on hosted application, logging configuration, analytics, and integrations."
+common_use_cases:
+  - hosting
+  - deployment
+  - serverless functions
+  - web analytics
+operational_criticality_default: high
+migration_effort_default: high
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: medium
+  operational_criticality: high
+  migration_effort: high
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - configure_better
+    - strategic_migration_only
+  notes: "Deployment platforms are often strategic dependencies. Review regions, logs, build secrets, and edge/runtime usage."
+evidence_sources:
+  - title: Vercel documentation
+    url: "https://vercel.com/docs"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - deployment configuration
+    retrieved_at: unknown
+  - title: Vercel CLI package
+    url: "https://www.npmjs.com/package/vercel"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "A vercel.json file can exist without current production deployment on Vercel."
+  - "Data residency and runtime processing depend on project configuration."
+notes: "Review hosting findings with deployment topology and runtime regions."
+schema_version: "0.1"

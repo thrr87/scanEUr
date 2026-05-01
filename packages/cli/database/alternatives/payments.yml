@@ -1,0 +1,108 @@
+alternatives:
+  - id: alt_stripe_configure_better
+    source:
+      vendor_id: stripe
+      category: payments
+      use_case: online_payments
+    alternative:
+      vendor_id: stripe
+      name: Stripe contractual and data-minimization review
+      type: configure_better
+      website: "https://docs.stripe.com"
+    replacement:
+      replacement_type: configuration_only
+      fit_level: high
+      maturity: high
+      migration_effort: low
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: false
+      managed_option: true
+      operational_burden: low
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Review current contractual, regional, tax, and payment-method documentation."
+      ownership_notes: "No ownership/control claim is made by this draft."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams where payment migration is high-risk or product-critical."
+        - "Teams needing a near-term review workflow rather than immediate migration."
+      poor_fit_cases:
+        - "Teams with a hard requirement to replace the payment processor."
+      known_gaps:
+        - "Does not remove processor dependency."
+      migration_notes: []
+      configuration_notes:
+        - "Review payment methods, billing address collection, metadata, webhooks, tax, chargebacks, and data retention."
+    ranking:
+      methodology_basis:
+        - operational_criticality
+        - low_migration_effort
+        - configuration_improvement
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Stripe documentation
+        url: "https://docs.stripe.com"
+        source_type: documentation
+        supports:
+          - configuration review source
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Payment review requires business, tax, legal, and technical context."
+    schema_version: "0.1"
+  - id: alt_payments_no_quick_equivalent
+    source:
+      vendor_id: null
+      category: payments
+      use_case: online_payments
+    alternative:
+      vendor_id: null
+      name: No generic quick payment replacement
+      type: no_good_equivalent
+      website: null
+    replacement:
+      replacement_type: strategic_only
+      fit_level: unknown
+      maturity: unknown
+      migration_effort: critical
+      alternative_maturity: unknown
+    hosting:
+      self_hosting_option: false
+      managed_option: true
+      operational_burden: critical
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Payment routing, acquiring, fraud, tax, and regional coverage are vendor- and business-specific."
+      ownership_notes: "No vendor ownership/control claim is made."
+    usage_guidance:
+      best_fit_cases:
+        - "Reports that need to avoid presenting payment migration as a simple quick win."
+      poor_fit_cases:
+        - "Teams that have already selected specific candidate processors."
+      known_gaps:
+        - "Does not name a replacement provider."
+      migration_notes:
+        - "Treat payment processor replacement as a strategic project with product, finance, legal, support, and engineering review."
+      configuration_notes: []
+    ranking:
+      methodology_basis:
+        - operational_criticality
+        - migration_effort
+        - feature_fit
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources: []
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Absence of a named provider is not a recommendation to keep the current processor."
+    schema_version: "0.1"

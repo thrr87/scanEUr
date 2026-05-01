@@ -2,6 +2,8 @@
 
 **scanEUr** is a free, MIT-licensed, local-first scanner for jurisdictional software dependencies.
 
+Current release: **v0.1.0 Local CLI MVP**.
+
 It scans a local software project and detects third-party services, infrastructure vendors, SDKs, SaaS tools, cloud dependencies, analytics providers, payment providers, authentication providers, observability tools, AI APIs, email/SMS services, and other external operational dependencies.
 
 scanEUr helps European teams understand what their software stack depends on, what may require review, and which alternatives may be realistic. It does not provide legal advice and does not declare GDPR compliance or non-compliance.
@@ -57,18 +59,31 @@ scanEUr does not:
 
 ## Install
 
-Assumed npm package name:
+After the package is published, install the CLI from npm:
 
 ```bash
 npm install -g @scaneur/cli
 ```
 
-## Quickstart
+From a source checkout, run the same CLI entrypoint directly:
+
+```bash
+npm install
+node packages/cli/src/index.js --version
+```
+
+## CLI quickstart
 
 Run a local scan:
 
 ```bash
 scaneur scan .
+```
+
+From a source checkout:
+
+```bash
+node packages/cli/src/index.js scan examples/node-next-sentry-stripe --output scaneur-report.md
 ```
 
 Write a Markdown report:
@@ -165,14 +180,18 @@ Supported MVP file types include package manifests, lockfiles, Docker files, Doc
 
 See:
 
+- `RELEASE_NOTES.md`
 - `docs/00_project_brief.md`
 - `docs/01_product_prd.md`
 - `docs/05_cli_specification.md`
 - `docs/11_scoring_methodology.md`
 - `docs/15_privacy_security_and_trust_model.md`
+- `docs/16_governance_and_vendor_inclusion_policy.md`
 - `METHODOLOGY.md`
 - `VENDOR_INCLUSION_POLICY.md`
 - `NO_AFFILIATE_POLICY.md`
+- `SECURITY.md`
+- `FUNDING.md`
 
 ## Contributing
 

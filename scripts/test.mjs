@@ -28,6 +28,7 @@ if (runTarget && runTarget !== "database") {
 
 run("node", ["scripts/verify-scaffold.mjs"]);
 run("node", ["scripts/validate-database.mjs"]);
+run("node", ["scripts/validate-database.mjs", "packages/cli/database"]);
 
 if (!databaseOnly) {
   run("npm", ["run", "test", "--workspaces", "--if-present"]);

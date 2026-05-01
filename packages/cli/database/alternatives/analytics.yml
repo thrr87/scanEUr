@@ -1,0 +1,175 @@
+alternatives:
+  - id: alt_ga4_matomo
+    source:
+      vendor_id: ga4
+      category: analytics
+      use_case: web_analytics
+    alternative:
+      vendor_id: null
+      name: Matomo
+      type: open_source
+      website: "https://matomo.org"
+    replacement:
+      replacement_type: partial
+      fit_level: high
+      maturity: high
+      migration_effort: medium
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: true
+      managed_option: true
+      operational_burden: medium
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on self-hosting choice or managed hosting configuration."
+      ownership_notes: "Review current project and company details before verified publication."
+    usage_guidance:
+      best_fit_cases:
+        - "Mature website analytics where self-hosting is acceptable."
+        - "Teams that can migrate dashboards, events, and consent handling."
+      poor_fit_cases:
+        - "Deep Google Ads attribution and advertising ecosystem workflows."
+      known_gaps:
+        - "May not match every GA4 advertising and attribution integration."
+      migration_notes:
+        - "Replace measurement script and validate event model."
+      configuration_notes:
+        - "Review IP anonymization, retention, consent, and cookie settings."
+    ranking:
+      methodology_basis:
+        - feature_fit
+        - maturity
+        - self_hosting_option
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Matomo product site
+        url: "https://matomo.org"
+        source_type: official
+        supports:
+          - product identity
+          - self-hosted and managed availability
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Suitability depends on analytics requirements, consent model, and hosting operations."
+    schema_version: "0.1"
+  - id: alt_ga4_plausible
+    source:
+      vendor_id: ga4
+      category: analytics
+      use_case: privacy_friendly_web_analytics
+    alternative:
+      vendor_id: null
+      name: Plausible
+      type: open_source
+      website: "https://plausible.io"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: high
+      migration_effort: low
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: true
+      managed_option: true
+      operational_burden: low
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Review current hosting and product documentation."
+      ownership_notes: "Review current project and company details before verified publication."
+    usage_guidance:
+      best_fit_cases:
+        - "Simple website analytics with low migration effort."
+        - "Teams that do not need advanced advertising attribution."
+      poor_fit_cases:
+        - "Advanced product analytics, experimentation, or ad attribution."
+      known_gaps:
+        - "Less suited for complex event analytics than broader product analytics suites."
+      migration_notes:
+        - "Replace tracking script and map core goals."
+      configuration_notes: []
+    ranking:
+      methodology_basis:
+        - low_migration_effort
+        - mature_managed_option
+        - self_hosting_option
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Plausible product site
+        url: "https://plausible.io"
+        source_type: official
+        supports:
+          - product identity
+          - analytics use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Not a full GA4 replacement for all marketing workflows."
+    schema_version: "0.1"
+  - id: alt_ga4_umami
+    source:
+      vendor_id: ga4
+      category: analytics
+      use_case: lightweight_web_analytics
+    alternative:
+      vendor_id: null
+      name: Umami
+      type: open_source
+      website: "https://umami.is"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: medium
+      migration_effort: low
+      alternative_maturity: medium
+    hosting:
+      self_hosting_option: true
+      managed_option: true
+      operational_burden: medium
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on deployment choice or managed service configuration."
+      ownership_notes: "Review current project and company details before verified publication."
+    usage_guidance:
+      best_fit_cases:
+        - "Lightweight traffic analytics."
+        - "Small teams wanting a self-hosted option."
+      poor_fit_cases:
+        - "Advanced attribution, experimentation, or product analytics."
+      known_gaps:
+        - "May require self-hosting expertise for full control."
+      migration_notes:
+        - "Replace script and recreate core dashboards."
+      configuration_notes: []
+    ranking:
+      methodology_basis:
+        - self_hosting_option
+        - low_migration_effort
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Umami product site
+        url: "https://umami.is"
+        source_type: official
+        supports:
+          - product identity
+          - analytics use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Not intended as a complete GA4 replacement."
+    schema_version: "0.1"

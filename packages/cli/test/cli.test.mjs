@@ -55,6 +55,10 @@ async function makeFixture() {
 
 const fixture = await makeFixture();
 
+const version = await execCli(["--version"]);
+assert.equal(version.status, 0, version.stderr);
+assert.equal(version.stdout.trim(), "0.1.0");
+
 const jsonScan = await execCli(["scan", fixture.project, "--db", fixture.db, "--format", "json"]);
 assert.equal(jsonScan.status, 0, jsonScan.stderr);
 const parsedScan = JSON.parse(jsonScan.stdout);

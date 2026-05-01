@@ -230,7 +230,8 @@ export async function validateSeedDatabase(rootPath = repoRoot) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const result = await validateSeedDatabase();
+  const targetPath = process.argv[2] ? path.resolve(process.argv[2]) : repoRoot;
+  const result = await validateSeedDatabase(targetPath);
 
   if (!result.success) {
     console.error(`Database validation failed:\n${formatIssues(result.errors)}`);
@@ -238,6 +239,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   console.log(
-    `Database validation passed: ${result.summary.vendors} vendors, ${result.summary.fingerprints} fingerprints, ${result.summary.alternatives} alternatives.`
+    `Database validation passed for ${path.relative(repoRoot, targetPath) || "."}: ${result.summary.vendors} vendors, ${result.summary.fingerprints} fingerprints, ${result.summary.alternatives} alternatives.`
   );
 }

@@ -1,7 +1,6 @@
 {
   "name": "@scaneur/cli",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Command-line interface package for scanEUr.",
   "license": "MIT",
   "type": "module",
@@ -14,13 +13,16 @@
     "src",
     "database"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node test/cli.test.mjs"
   },
   "dependencies": {
-    "@scaneur/reports": "0.0.0",
-    "@scaneur/rules": "0.0.0",
-    "@scaneur/scanner": "0.0.0",
-    "@scaneur/types": "0.0.0"
+    "@scaneur/reports": "0.1.0",
+    "@scaneur/rules": "0.1.0",
+    "@scaneur/scanner": "0.1.0",
+    "@scaneur/types": "0.1.0"
   }
 }

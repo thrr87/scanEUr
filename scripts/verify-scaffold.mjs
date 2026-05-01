@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const releaseVersion = "0.1.0";
 
 const requiredDirectories = [
   "apps/docs",
@@ -33,12 +34,28 @@ const requiredDirectories = [
 
 const requiredFiles = [
   "package.json",
+  "README.md",
+  "RELEASE_NOTES.md",
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "FUNDING.md",
+  "LICENSE",
+  "LICENSE_NOTES.md",
+  "METHODOLOGY.md",
+  "NO_AFFILIATE_POLICY.md",
+  "SECURITY.md",
+  "VENDOR_INCLUSION_POLICY.md",
   "tsconfig.base.json",
   ".gitignore",
   "apps/docs/package.json",
   "apps/docs/README.md",
+  "apps/docs/scripts/astro.mjs",
   "packages/cli/package.json",
   "packages/cli/README.md",
+  "packages/cli/database/vendors/analytics/ga4.yml",
+  "packages/cli/database/vendors/payments/stripe.yml",
+  "packages/cli/database/fingerprints/npm.yml",
+  "packages/cli/database/alternatives/analytics.yml",
   "packages/scanner/package.json",
   "packages/scanner/README.md",
   "packages/rules/package.json",
@@ -106,11 +123,37 @@ const expectedWorkspaces = ["apps/*", "packages/*"];
 if (JSON.stringify(rootPackage.workspaces) !== JSON.stringify(expectedWorkspaces)) {
   fail(`Root workspaces must be ${expectedWorkspaces.join(", ")}`);
 }
+if (rootPackage.version !== releaseVersion) {
+  fail(`Root package version must be ${releaseVersion}`);
+}
+if (rootPackage.private !== true) {
+  fail("Root package must remain private.");
+}
+
+const docsPackage = readJson("apps/docs/package.json");
+for (const scriptName of ["dev", "build", "preview"]) {
+  if (docsPackage.scripts?.[scriptName] !== `node scripts/astro.mjs ${scriptName}`) {
+    fail(`apps/docs ${scriptName} script must use scripts/astro.mjs`);
+  }
+}
+const docsAstroWrapper = readFileSync(path.join(root, "apps/docs/scripts/astro.mjs"), "utf8");
+if (!docsAstroWrapper.includes("ASTRO_TELEMETRY_DISABLED")) {
+  fail("apps/docs/scripts/astro.mjs must disable Astro telemetry");
+}
 
 for (const [relativePath, expectedName] of packageNames.entries()) {
   const packageJson = readJson(relativePath);
   if (packageJson.name !== expectedName) {
     fail(`${relativePath} must be named ${expectedName}`);
+  }
+  if (packageJson.version !== releaseVersion) {
+    fail(`${relativePath} must be version ${releaseVersion}`);
+  }
+  if (relativePath.startsWith("packages/") && packageJson.private === true) {
+    fail(`${relativePath} must not be private for release packaging`);
+  }
+  if (relativePath.startsWith("packages/") && packageJson.publishConfig?.access !== "public") {
+    fail(`${relativePath} must declare publishConfig.access public`);
   }
 
   for (const field of ["dependencies", "devDependencies", "peerDependencies"]) {
@@ -119,6 +162,9 @@ for (const [relativePath, expectedName] of packageNames.entries()) {
       const allowedForPackage = allowedExternalDependencies.get(relativePath) ?? new Set();
       if (!dependencyName.startsWith("@scaneur/") && !allowedForPackage.has(dependencyName)) {
         fail(`${relativePath} contains external ${field} dependency: ${dependencyName}`);
+      }
+      if (dependencyName.startsWith("@scaneur/") && dependencies[dependencyName] !== releaseVersion) {
+        fail(`${relativePath} dependency ${dependencyName} must be version ${releaseVersion}`);
       }
     }
   }

@@ -1,7 +1,6 @@
 {
   "name": "@scaneur/scanner",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Reusable scanner engine package for scanEUr.",
   "license": "MIT",
   "type": "module",
@@ -20,12 +19,15 @@
   "files": [
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node test/file-discovery.test.mjs && node test/parser.test.mjs && node test/matcher.test.mjs && node test/fingerprint.test.mjs && node test/unknown.test.mjs && node test/scoring.test.mjs && node test/mvp-fixtures.test.mjs"
   },
   "dependencies": {
-    "@scaneur/reports": "0.0.0",
-    "@scaneur/rules": "0.0.0",
-    "@scaneur/types": "0.0.0"
+    "@scaneur/reports": "0.1.0",
+    "@scaneur/rules": "0.1.0",
+    "@scaneur/types": "0.1.0"
   }
 }

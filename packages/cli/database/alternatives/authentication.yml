@@ -1,0 +1,118 @@
+alternatives:
+  - id: alt_auth0_keycloak
+    source:
+      vendor_id: auth0
+      category: authentication
+      use_case: identity_provider
+    alternative:
+      vendor_id: null
+      name: Keycloak
+      type: open_source
+      website: "https://www.keycloak.org"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: high
+      migration_effort: high
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: true
+      managed_option: false
+      operational_burden: high
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on where and how Keycloak is hosted."
+      ownership_notes: "Open-source project governance and any managed hosting provider require separate review."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams with infrastructure capacity for self-hosted identity."
+        - "Applications needing standards-based OIDC or SAML flows."
+      poor_fit_cases:
+        - "Teams needing a low-operations managed identity service."
+      known_gaps:
+        - "Operational burden and migration risk can be high."
+        - "Feature parity with hosted identity products depends on extensions and configuration."
+      migration_notes:
+        - "Plan tenant, user, application, roles, social login, MFA, and session migration."
+      configuration_notes:
+        - "Review backups, high availability, token lifetimes, logging, and admin access."
+    ranking:
+      methodology_basis:
+        - open_source
+        - maturity
+        - self_hosting_option
+        - migration_effort
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Keycloak project site
+        url: "https://www.keycloak.org"
+        source_type: official
+        supports:
+          - product identity
+          - authentication use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Authentication migration suitability is highly application-specific."
+    schema_version: "0.1"
+  - id: alt_auth0_configure_better
+    source:
+      vendor_id: auth0
+      category: authentication
+      use_case: identity_provider
+    alternative:
+      vendor_id: auth0
+      name: Auth0 tenant hardening review
+      type: configure_better
+      website: "https://auth0.com/docs"
+    replacement:
+      replacement_type: configuration_only
+      fit_level: high
+      maturity: high
+      migration_effort: low
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: false
+      managed_option: true
+      operational_burden: low
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Review tenant region, logs, retention, and current vendor documentation."
+      ownership_notes: "No ownership/control claim is made by this draft."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams where identity migration risk is too high for a quick change."
+      poor_fit_cases:
+        - "Teams with a hard requirement to self-host identity."
+      known_gaps:
+        - "Does not remove vendor dependency."
+      migration_notes: []
+      configuration_notes:
+        - "Review tenant region, log retention, social connections, MFA, custom domains, and data exports."
+    ranking:
+      methodology_basis:
+        - low_migration_effort
+        - operational_risk
+        - configuration_improvement
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Auth0 documentation
+        url: "https://auth0.com/docs"
+        source_type: documentation
+        supports:
+          - configuration review source
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Configuration review does not replace contractual or legal review."
+    schema_version: "0.1"

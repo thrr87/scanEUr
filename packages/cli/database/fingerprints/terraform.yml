@@ -1,0 +1,52 @@
+fingerprints:
+  - id: fingerprint_terraform_cloudflare
+    verification_status: agent_draft
+    rule_type: terraform_provider
+    match:
+      provider_names:
+        - cloudflare
+    result:
+      vendor_id: cloudflare
+      candidate_category: cloud_infrastructure
+      confidence: high
+      evidence_label: Cloudflare Terraform provider
+      observed_fact: "The cloudflare Terraform provider was found."
+      inference: "The project may manage Cloudflare resources with Terraform."
+      manual_review_recommended: true
+    limitations:
+      - "Terraform provider presence does not reveal active resources or production usage."
+    schema_version: "0.1"
+  - id: fingerprint_terraform_vercel
+    verification_status: agent_draft
+    rule_type: terraform_provider
+    match:
+      provider_names:
+        - vercel
+    result:
+      vendor_id: vercel
+      candidate_category: deployment_platform
+      confidence: high
+      evidence_label: Vercel Terraform provider
+      observed_fact: "The vercel Terraform provider was found."
+      inference: "The project may manage Vercel resources with Terraform."
+      manual_review_recommended: true
+    limitations:
+      - "Terraform provider presence does not reveal active resources or production usage."
+    schema_version: "0.1"
+  - id: fingerprint_terraform_auth0
+    verification_status: agent_draft
+    rule_type: terraform_provider
+    match:
+      provider_names:
+        - auth0
+    result:
+      vendor_id: auth0
+      candidate_category: authentication
+      confidence: high
+      evidence_label: Auth0 Terraform provider
+      observed_fact: "The auth0 Terraform provider was found."
+      inference: "The project may manage Auth0 resources with Terraform."
+      manual_review_recommended: true
+    limitations:
+      - "Terraform provider presence does not reveal tenant data, region, or production usage."
+    schema_version: "0.1"

@@ -1,0 +1,175 @@
+alternatives:
+  - id: alt_vercel_coolify
+    source:
+      vendor_id: vercel
+      category: deployment_platform
+      use_case: app_hosting
+    alternative:
+      vendor_id: null
+      name: Coolify
+      type: open_source
+      website: "https://coolify.io"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: medium
+      migration_effort: medium
+      alternative_maturity: medium
+    hosting:
+      self_hosting_option: true
+      managed_option: true
+      operational_burden: medium
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on the server or managed hosting provider selected."
+      ownership_notes: "Review current project and managed-service details before verified publication."
+    usage_guidance:
+      best_fit_cases:
+        - "Small applications that can run on user-selected infrastructure."
+        - "Teams wanting deployment control without building a full platform."
+      poor_fit_cases:
+        - "Applications deeply dependent on Vercel edge/runtime features."
+      known_gaps:
+        - "Not a drop-in replacement for all serverless, edge, analytics, or marketplace integrations."
+      migration_notes:
+        - "Validate build pipelines, environment variables, previews, domains, logs, and rollbacks."
+      configuration_notes:
+        - "Review backups, update process, access controls, and host region."
+    ranking:
+      methodology_basis:
+        - self_hosting_option
+        - feature_fit
+        - operational_burden
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Coolify product site
+        url: "https://coolify.io"
+        source_type: official
+        supports:
+          - product identity
+          - hosting use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Hosting suitability depends on framework, runtime, scaling, and operational capacity."
+    schema_version: "0.1"
+  - id: alt_vercel_dokku
+    source:
+      vendor_id: vercel
+      category: deployment_platform
+      use_case: app_hosting
+    alternative:
+      vendor_id: null
+      name: Dokku
+      type: open_source
+      website: "https://dokku.com"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: high
+      migration_effort: medium
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: true
+      managed_option: false
+      operational_burden: high
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on the server provider and region selected."
+      ownership_notes: "Open-source project governance and server provider require separate review."
+    usage_guidance:
+      best_fit_cases:
+        - "Simple app hosting where a Heroku-like self-hosted workflow is sufficient."
+      poor_fit_cases:
+        - "Teams needing edge functions, global CDN, preview platform, or managed scaling."
+      known_gaps:
+        - "Requires server operations and does not replace all managed platform features."
+      migration_notes:
+        - "Validate buildpacks, deployment process, domains, TLS, logs, backups, and monitoring."
+      configuration_notes:
+        - "Review host region, hardening, backup, and patching practices."
+    ranking:
+      methodology_basis:
+        - open_source
+        - maturity
+        - self_hosting_option
+        - operational_burden
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Dokku project site
+        url: "https://dokku.com"
+        source_type: official
+        supports:
+          - product identity
+          - hosting use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Not a complete replacement for serverless or edge platform capabilities."
+    schema_version: "0.1"
+  - id: alt_cloudflare_configure_better
+    source:
+      vendor_id: cloudflare
+      category: cloud_infrastructure
+      use_case: edge_network
+    alternative:
+      vendor_id: cloudflare
+      name: Cloudflare product and region configuration review
+      type: configure_better
+      website: "https://developers.cloudflare.com"
+    replacement:
+      replacement_type: configuration_only
+      fit_level: high
+      maturity: high
+      migration_effort: low
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: false
+      managed_option: true
+      operational_burden: low
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Review exact products, logs, edge configuration, storage regions, and current documentation."
+      ownership_notes: "No ownership/control claim is made by this draft."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams using Cloudflare as critical DNS, CDN, or edge infrastructure where migration is high-risk."
+      poor_fit_cases:
+        - "Teams with a hard requirement to remove Cloudflare from the architecture."
+      known_gaps:
+        - "Does not remove vendor dependency."
+      migration_notes: []
+      configuration_notes:
+        - "Review logs, cache rules, Workers routes, R2 buckets, DNS criticality, and access controls."
+    ranking:
+      methodology_basis:
+        - operational_criticality
+        - low_migration_effort
+        - configuration_improvement
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Cloudflare developer documentation
+        url: "https://developers.cloudflare.com"
+        source_type: documentation
+        supports:
+          - configuration review source
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Configuration review does not replace contractual or legal review."
+    schema_version: "0.1"

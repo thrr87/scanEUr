@@ -9,6 +9,10 @@ scaneur scan .
 scaneur scan . --format json --output scaneur-report.json
 scaneur explain stripe
 scaneur alternatives ga4`;
+
+const sourceCommands = `npm install
+node packages/cli/src/index.js --version
+node packages/cli/src/index.js scan examples/node-next-sentry-stripe --output scaneur-report.md`;
 ---
 
 <BaseLayout title="CLI quickstart" description="Install the scanEUr CLI, run a local scan, and generate a report.">
@@ -20,6 +24,12 @@ scaneur alternatives ga4`;
     <div class="content-block" id="commands">
       <h2>Commands</h2>
       <CodeBlock code={commands} language="bash" />
+    </div>
+
+    <div class="content-block" id="source-checkout">
+      <h2>Source checkout</h2>
+      <p>Before npm publishing, the MVP CLI can be exercised from the repository entrypoint.</p>
+      <CodeBlock code={sourceCommands} language="bash" />
     </div>
 
     <Callout title="Offline note">

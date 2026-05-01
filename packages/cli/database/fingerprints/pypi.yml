@@ -1,0 +1,86 @@
+fingerprints:
+  - id: fingerprint_pypi_stripe
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: pypi
+      package_name: stripe
+    result:
+      vendor_id: stripe
+      candidate_category: payments
+      confidence: high
+      evidence_label: Stripe Python package
+      observed_fact: "The stripe Python package was found."
+      inference: "The project may integrate with Stripe payment APIs."
+      manual_review_recommended: true
+    limitations:
+      - "Package presence does not prove production payment processing."
+    schema_version: "0.1"
+  - id: fingerprint_pypi_openai
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: pypi
+      package_name: openai
+    result:
+      vendor_id: openai
+      candidate_category: ai_api
+      confidence: high
+      evidence_label: OpenAI Python package
+      observed_fact: "The openai Python package was found."
+      inference: "The project may call OpenAI APIs."
+      manual_review_recommended: true
+    limitations:
+      - "SDK presence does not prove prompt contents or personal data processing."
+    schema_version: "0.1"
+  - id: fingerprint_pypi_sentry_sdk
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: pypi
+      package_name: sentry-sdk
+    result:
+      vendor_id: sentry
+      candidate_category: observability
+      confidence: high
+      evidence_label: Sentry Python SDK package
+      observed_fact: "The sentry-sdk Python package was found."
+      inference: "The project may send error or performance telemetry to Sentry."
+      manual_review_recommended: true
+    limitations:
+      - "Telemetry payloads and enabled environments require configuration review."
+    schema_version: "0.1"
+  - id: fingerprint_pypi_sendgrid
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: pypi
+      package_name: sendgrid
+    result:
+      vendor_id: sendgrid
+      candidate_category: email_sms
+      confidence: high
+      evidence_label: SendGrid Python package
+      observed_fact: "The sendgrid Python package was found."
+      inference: "The project may send email through SendGrid."
+      manual_review_recommended: true
+    limitations:
+      - "Message payloads and production usage require review."
+    schema_version: "0.1"
+  - id: fingerprint_pypi_supabase
+    verification_status: agent_draft
+    rule_type: package
+    match:
+      ecosystem: pypi
+      package_name: supabase
+    result:
+      vendor_id: supabase
+      candidate_category: database
+      confidence: high
+      evidence_label: Supabase Python package
+      observed_fact: "The supabase Python package was found."
+      inference: "The project may use Supabase services."
+      manual_review_recommended: true
+    limitations:
+      - "The package does not reveal exact Supabase services or deployment model."
+    schema_version: "0.1"

@@ -1,0 +1,99 @@
+id: cloudflare
+name: Cloudflare
+category: cloud_infrastructure
+secondary_categories:
+  - cdn
+  - hosting_platform
+  - security
+aliases:
+  - Cloudflare Workers
+  - Cloudflare Pages
+  - Cloudflare R2
+website: "https://www.cloudflare.com"
+identifiers:
+  domains:
+    - cloudflare.com
+    - workers.dev
+    - pages.dev
+  packages:
+    npm:
+      - wrangler
+      - '@cloudflare/workers-types'
+    pypi: []
+    other: []
+  env_patterns:
+    - '^CLOUDFLARE_'
+    - '^CF_'
+  docker_images: []
+  github_actions:
+    - cloudflare/wrangler-action
+  config_files:
+    - wrangler.toml
+    - wrangler.json
+  terraform_providers:
+    - cloudflare
+jurisdiction:
+  headquarters_country: unknown_review_required
+  headquarters_region: Unknown
+  eu_establishment: unknown
+  data_residency_options: []
+  jurisdiction_notes: "Network, CDN, edge, and storage processing require service-specific review."
+ownership_control:
+  control_region: Unknown
+  parent_company: unknown
+  publicly_traded: unknown
+  control_notes: "Ownership/control is not asserted by this draft."
+data_categories:
+  likely_personal_data: medium
+  common_data_types:
+    - IP address
+    - request metadata
+    - logs
+    - cached content
+  sensitive_data_possible: true
+  data_notes: "Actual data depends on CDN, Workers, Pages, R2, logs, and application behavior."
+common_use_cases:
+  - cdn
+  - dns
+  - edge compute
+  - object storage
+  - security
+operational_criticality_default: high
+migration_effort_default: high
+scoring_defaults:
+  jurisdiction_signal: high
+  data_sensitivity_signal: medium
+  operational_criticality: high
+  migration_effort: high
+  alternative_maturity: medium
+  evidence_confidence: high
+recommendation_defaults:
+  categories:
+    - review_contractually
+    - configure_better
+    - strategic_migration_only
+  notes: "Review product-specific data flows, logging, edge regions, DNS criticality, and caching behavior."
+evidence_sources:
+  - title: Cloudflare developer documentation
+    url: "https://developers.cloudflare.com"
+    source_type: documentation
+    supports:
+      - vendor identity
+      - product identifiers
+    retrieved_at: unknown
+  - title: Wrangler package
+    url: "https://www.npmjs.com/package/wrangler"
+    source_type: registry
+    supports:
+      - npm package identifier
+    retrieved_at: unknown
+verification:
+  status: agent_draft
+  last_reviewed: unknown
+  reviewed_by: unknown
+  review_notes: "Initial seed profile. Jurisdiction and ownership/control fields require human review before verification."
+limitations:
+  - "Cloudflare identifiers may indicate DNS, CDN, Pages, Workers, storage, or security usage with different risk profiles."
+  - "This draft does not make legal or compliance conclusions."
+notes: "Classify exact Cloudflare product usage during manual review."
+schema_version: "0.1"

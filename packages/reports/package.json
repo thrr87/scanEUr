@@ -1,7 +1,6 @@
 {
   "name": "@scaneur/reports",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Report rendering package for scanEUr.",
   "license": "MIT",
   "type": "module",
@@ -16,10 +15,13 @@
   "files": [
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node test/markdown-report.test.mjs && node test/json-report.test.mjs"
   },
   "dependencies": {
-    "@scaneur/types": "0.0.0"
+    "@scaneur/types": "0.1.0"
   }
 }

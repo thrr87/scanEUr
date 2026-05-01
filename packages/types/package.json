@@ -1,7 +1,6 @@
 {
   "name": "@scaneur/types",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Shared TypeScript types and schema definitions for scanEUr.",
   "license": "MIT",
   "type": "module",
@@ -16,6 +15,9 @@
   "files": [
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node test/schema.test.mjs"
   }

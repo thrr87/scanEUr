@@ -1,0 +1,115 @@
+alternatives:
+  - id: alt_sendgrid_postal
+    source:
+      vendor_id: sendgrid
+      category: email_sms
+      use_case: transactional_email
+    alternative:
+      vendor_id: null
+      name: Postal
+      type: open_source
+      website: "https://postalserver.io"
+    replacement:
+      replacement_type: partial
+      fit_level: medium
+      maturity: medium
+      migration_effort: high
+      alternative_maturity: medium
+    hosting:
+      self_hosting_option: true
+      managed_option: false
+      operational_burden: high
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Depends on hosting provider, mail routing, and deliverability setup."
+      ownership_notes: "Open-source project governance and infrastructure provider require separate review."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams with email operations expertise and strong control requirements."
+      poor_fit_cases:
+        - "Teams needing managed deliverability, compliance tooling, and support."
+      known_gaps:
+        - "Deliverability, abuse handling, IP reputation, and bounce processing are operationally demanding."
+      migration_notes:
+        - "Plan SMTP/API changes, DNS records, DKIM, SPF, DMARC, suppression lists, webhooks, and templates."
+      configuration_notes:
+        - "Review retention, logs, access controls, and message content minimization."
+    ranking:
+      methodology_basis:
+        - self_hosting_option
+        - operational_burden
+        - migration_effort
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: Postal project site
+        url: "https://postalserver.io"
+        source_type: official
+        supports:
+          - product identity
+          - email use case
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Self-hosted email can be substantially harder than managed transactional email."
+    schema_version: "0.1"
+  - id: alt_sendgrid_configure_better
+    source:
+      vendor_id: sendgrid
+      category: email_sms
+      use_case: transactional_email
+    alternative:
+      vendor_id: sendgrid
+      name: SendGrid payload and retention review
+      type: configure_better
+      website: "https://docs.sendgrid.com"
+    replacement:
+      replacement_type: configuration_only
+      fit_level: high
+      maturity: high
+      migration_effort: low
+      alternative_maturity: high
+    hosting:
+      self_hosting_option: false
+      managed_option: true
+      operational_burden: low
+    control_notes:
+      eu_or_european_control_signal: unknown
+      data_residency_notes: "Review current routing, retention, event webhook, and legal documentation."
+      ownership_notes: "No ownership/control claim is made by this draft."
+    usage_guidance:
+      best_fit_cases:
+        - "Teams where email provider migration is not a quick win."
+      poor_fit_cases:
+        - "Teams with a hard requirement to self-host email delivery."
+      known_gaps:
+        - "Does not remove email provider dependency."
+      migration_notes: []
+      configuration_notes:
+        - "Minimize template payloads, review event webhooks, retention, suppression lists, tracking, and access controls."
+    ranking:
+      methodology_basis:
+        - low_migration_effort
+        - configuration_improvement
+        - operational_risk
+      commercial_influence: none
+      affiliate_link: false
+      sponsored: false
+    evidence_sources:
+      - title: SendGrid documentation
+        url: "https://docs.sendgrid.com"
+        source_type: documentation
+        supports:
+          - configuration review source
+        retrieved_at: unknown
+    verification:
+      status: agent_draft
+      last_reviewed: unknown
+      reviewed_by: unknown
+    limitations:
+      - "Configuration review does not replace contractual or legal review."
+    schema_version: "0.1"

@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import http from "node:http";
 import https from "node:https";
 import net from "node:net";
+import os from "node:os";
 import tls from "node:tls";
+import { cp, mkdtemp, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -168,8 +170,21 @@ const vendorDatabase = {
 
 const fingerprintDatabase = { fingerprints: [] };
 
-async function scanExample(exampleName) {
-  const targetPath = path.join(examplesRoot, exampleName);
+async function scanExample(exampleName, options = {}) {
+  let targetPath = path.join(examplesRoot, exampleName);
+  let temporaryRoot = null;
+
+  if (options.files) {
+    temporaryRoot = await mkdtemp(path.join(os.tmpdir(), `scaneur-${exampleName}-`));
+    targetPath = path.join(temporaryRoot, exampleName);
+    await cp(path.join(examplesRoot, exampleName), targetPath, { recursive: true });
+    await Promise.all(
+      Object.entries(options.files).map(([relativePath, content]) =>
+        writeFile(path.join(targetPath, relativePath), content, "utf8")
+      )
+    );
+  }
+
   const discovery = await discoverFiles(targetPath);
   const evidenceCandidates = [];
   const parserWarnings = [];
@@ -220,13 +235,17 @@ async function scanExample(exampleName) {
     parser_warnings: parserWarnings
   };
 
-  const validation = validateScanResult(scanResult);
-  assert.equal(validation.success, true, validation.success ? "" : JSON.stringify(validation.errors, null, 2));
+  try {
+    const validation = validateScanResult(scanResult);
+    assert.equal(validation.success, true, validation.success ? "" : JSON.stringify(validation.errors, null, 2));
 
-  return {
-    ...scanResult,
-    evidenceCandidates
-  };
+    return {
+      ...scanResult,
+      evidenceCandidates
+    };
+  } finally {
+    if (temporaryRoot) await rm(temporaryRoot, { recursive: true, force: true });
+  }
 }
 
 function findingIds(scanResult) {
@@ -292,7 +311,11 @@ assert.deepEqual(findingIds(nodeBasic), []);
 assert.deepEqual(unknownIds(nodeBasic), []);
 assert.deepEqual(nodeBasic.files_scanned.map((file) => file.path), ["Dockerfile", "package.json"]);
 
-const nodeNext = await scanExample("node-next-sentry-stripe");
+const nodeNext = await scanExample("node-next-sentry-stripe", {
+  files: {
+    ".env.local": "STRIPE_SECRET_KEY=sk_live_local_fixture_do_not_print\nCUSTOMER_EMAIL=customer@example.invalid\n"
+  }
+});
 assert.deepEqual(findingIds(nodeNext), ["openai", "sentry", "stripe", "vercel"]);
 assert.equal(skippedReasons(nodeNext).get(".env.local"), "sensitive_file_default_skip");
 assert.ok(nodeNext.findings.find((finding) => finding.vendor_id === "stripe").evidence.some((item) => item.redacted));
