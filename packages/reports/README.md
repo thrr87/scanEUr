@@ -1,6 +1,6 @@
 # @scaneur/reports
 
-Report rendering package placeholder.
+Report rendering package for scanEUr.
 
 Responsibilities:
 
@@ -10,4 +10,12 @@ Responsibilities:
 - Future SARIF rendering.
 - Future `sovereignty-bom.json` rendering.
 
-No report renderer implementation is included yet.
+## Markdown
+
+```js
+import { renderMarkdownReport } from "@scaneur/reports";
+
+const markdown = renderMarkdownReport(scanResult);
+```
+
+The Markdown renderer includes the required disclaimer, separates evidence from unknowns, and redacts values that look like actual secrets.
