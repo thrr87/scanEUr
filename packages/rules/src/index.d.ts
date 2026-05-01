@@ -58,6 +58,7 @@ export type VendorMatcher = {
 
 export function loadVendorDatabase(rootPath?: string): Promise<VendorDatabase>;
 export function loadFingerprintDatabase(rootPath?: string): Promise<FingerprintDatabase>;
+export function loadAlternativesDatabase(rootPath?: string): Promise<AlternativesDatabase>;
 export function buildVendorLookupIndexes(vendorDatabase: unknown): {
   vendorsById: Map<string, VendorProfile>;
 };

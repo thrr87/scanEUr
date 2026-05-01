@@ -370,6 +370,10 @@ export async function loadFingerprintDatabase(rootPath = process.cwd()) {
   return loadCollectionDatabase(rootPath, "fingerprints", "fingerprints", assertFingerprintDatabase);
 }
 
+export async function loadAlternativesDatabase(rootPath = process.cwd()) {
+  return loadCollectionDatabase(rootPath, "alternatives", "alternatives", assertAlternativesDatabase);
+}
+
 function normalizeLower(value) {
   return String(value).trim().toLowerCase();
 }
