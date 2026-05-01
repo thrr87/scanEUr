@@ -6,6 +6,12 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "node -e \"process.exit(0)\""
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node test/docs-site.test.mjs"
+  },
+  "devDependencies": {
+    "astro": "5.7.13"
   }
 }

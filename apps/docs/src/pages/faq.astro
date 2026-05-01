@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const faqs = [
+  {
+    question: "Does scanEUr provide legal advice?",
+    answer: "No. scanEUr is a technical review-support tool. Legal, privacy, procurement, and architecture decisions still require human review."
+  },
+  {
+    question: "Does the default scan upload source code?",
+    answer: "No. The default scanner runs locally and offline using local files and local databases."
+  },
+  {
+    question: "Are alternatives paid placements?",
+    answer: "No. Alternatives must not be influenced by affiliate commissions, sponsored recommendations, paid placement, or paid ranking."
+  },
+  {
+    question: "Should critical infrastructure be replaced immediately?",
+    answer: "No. Findings may identify review priorities, but strategic dependencies need careful planning before any migration."
+  }
+];
+---
+
+<BaseLayout title="FAQ" description="Frequently asked questions about scanEUr scope, limits, and trust commitments.">
+  <PageIntro
+    title="FAQ"
+    lead="Short answers for common questions about scanEUr scope, privacy, recommendations, and review limits."
+  />
+  <section class="page-content">
+    <div class="info-grid">
+      {faqs.map((faq) => (
+        <article class="info-card">
+          <h2>{faq.question}</h2>
+          <p>{faq.answer}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

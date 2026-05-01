@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const steps = [
+  "Discover supported files.",
+  "Skip ignored and sensitive files.",
+  "Parse packages, lockfiles, configs, env templates, Docker files, and workflows.",
+  "Match evidence to vendor profiles and fingerprints.",
+  "Report unknown candidates separately.",
+  "Score findings using transparent dimensions.",
+  "Suggest alternatives when available.",
+  "Generate Markdown or JSON output."
+];
+---
+
+<BaseLayout title="How it works" description="How scanEUr reads local project files and produces dependency review reports.">
+  <PageIntro
+    title="How scanEUr works"
+    lead="scanEUr reads supported local project files, extracts safe dependency signals, matches those signals against a local vendor and fingerprint database, assigns separate scoring dimensions, and renders a Markdown or JSON report."
+  />
+  <section class="page-content">
+    <ol class="step-list">
+      {steps.map((step) => <li>{step}</li>)}
+    </ol>
+  </section>
+</BaseLayout>

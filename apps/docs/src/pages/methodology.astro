@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const dimensions = [
+  "jurisdiction signal",
+  "data sensitivity signal",
+  "operational criticality",
+  "migration effort",
+  "alternative maturity",
+  "evidence confidence"
+];
+---
+
+<BaseLayout title="Methodology" description="The scanEUr scoring method separates observed facts, inferred signals, unknowns, and manual review recommendations.">
+  <PageIntro
+    title="Methodology"
+    lead="scanEUr does not produce a single global “EU score.” A single number would hide too much context. Instead, scanEUr reports separate dimensions: jurisdiction signal, data sensitivity signal, operational criticality, migration effort, alternative maturity, and evidence confidence."
+  />
+  <section class="page-content">
+    <div class="content-block">
+      <h2>Scoring dimensions</h2>
+      <ul class="plain-list">
+        {dimensions.map((dimension) => <li>{dimension}</li>)}
+      </ul>
+    </div>
+    <Callout title="Required limits">
+      <p>scanEUr does not provide legal conclusions.</p>
+      <p>scanEUr does not rank vendors based on sponsorship, payment, affiliate links, or paid placement.</p>
+      <p>scanEUr separates observed facts, inferred signals, unknowns, and manual-review recommendations.</p>
+    </Callout>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const rows = [
+  {
+    title: "Stripe",
+    text: "Detected from package and env template signals. May indicate payment data processing. Manual review recommended."
+  },
+  {
+    title: "Google Analytics 4",
+    text: "Detected from package and endpoint strings. Review analytics purpose, consent model, and data settings."
+  },
+  {
+    title: "Unknown candidate",
+    text: "A provider-like hostname was found in a supported config file but did not match a verified profile."
+  }
+];
+---
+
+<BaseLayout title="Sample report" description="A practical example of scanEUr report language and finding structure.">
+  <PageIntro
+    title="Sample report"
+    lead="Reports are designed to show evidence, confidence, limits, unknowns, and review priorities without claiming compliance outcomes."
+  />
+  <section class="page-content wide">
+    <div class="sample-report">
+      {rows.map((row) => (
+        <article class="sample-row">
+          <strong>{row.title}</strong>
+          <span>{row.text}</span>
+        </article>
+      ))}
+    </div>
+    <Callout title="Report wording">
+      <p>Prefer “detected,” “may indicate,” and “manual review recommended” over certainty that the scanner cannot support.</p>
+    </Callout>
+  </section>
+</BaseLayout>

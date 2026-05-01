@@ -1,0 +1,69 @@
+---
+import "../styles/global.css";
+
+const {
+  title = "scanEUr",
+  description = "Local-first dependency intelligence for European software teams."
+} = Astro.props;
+
+const navItems = [
+  { label: "How it works", href: "/how-it-works/" },
+  { label: "Methodology", href: "/methodology/" },
+  { label: "Trust model", href: "/trust-model/" },
+  { label: "CLI quickstart", href: "/cli-quickstart/" }
+];
+
+const footerItems = [
+  { label: "Homepage", href: "/" },
+  { label: "How it works", href: "/how-it-works/" },
+  { label: "Methodology", href: "/methodology/" },
+  { label: "Vendor database", href: "/vendor-database/" },
+  { label: "Alternatives", href: "/alternatives/" },
+  { label: "Trust model", href: "/trust-model/" },
+  { label: "Contributing", href: "/contributing/" },
+  { label: "Sample report", href: "/sample-report/" },
+  { label: "CLI quickstart", href: "/cli-quickstart/" },
+  { label: "FAQ", href: "/faq/" }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} | scanEUr</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="scanEUr home">
+        <span class="brand-mark" aria-hidden="true">sE</span>
+        <span>scanEUr</span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <a class="brand footer-brand" href="/">
+          <span class="brand-mark" aria-hidden="true">sE</span>
+          <span>scanEUr</span>
+        </a>
+        <p>
+          Free, MIT-licensed, local-first dependency intelligence. scanEUr supports
+          technical review; it does not provide legal advice.
+        </p>
+      </div>
+      <nav class="footer-nav" aria-label="Documentation pages">
+        {footerItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </footer>
+  </body>
+</html>

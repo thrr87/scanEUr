@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const commitments = [
+  "Local-first by default.",
+  "Offline by default.",
+  "No telemetry by default.",
+  "No source-code upload.",
+  "No secret upload.",
+  "No affiliate links.",
+  "No paid recommendations.",
+  "No sponsored rankings.",
+  "Transparent methodology.",
+  "Evidence and confidence labels for findings."
+];
+
+const sensitiveFiles = [
+  ".env",
+  ".env.local",
+  ".env.production",
+  ".env.development",
+  ".env.* except explicit examples/templates",
+  "private key files",
+  "certificate files",
+  "token files"
+];
+---
+
+<BaseLayout title="Trust model" description="scanEUr privacy, security, and trust commitments.">
+  <PageIntro
+    title="Privacy, Security, and Trust Model"
+    lead="scanEUr earns trust by being conservative, transparent, and local. It should be useful even when it says “unknown.” It should never monetize recommendations or hide uncertainty."
+  />
+  <section class="page-content">
+    <div class="content-block">
+      <h2>Trust commitments</h2>
+      <ul class="plain-list">
+        {commitments.map((commitment) => <li>{commitment}</li>)}
+      </ul>
+    </div>
+
+    <Callout title="Default scan behavior">
+      <p>Default commands operate on local files and local databases. They do not require a hosted service.</p>
+      <p>The CLI must not collect or transmit usage events, scan results, dependency lists, file paths, errors, machine identifiers, IP addresses, or project metadata.</p>
+    </Callout>
+
+    <div class="content-block">
+      <h2>Sensitive file handling</h2>
+      <p>scanEUr skips sensitive files by default and extracts keys only from allowed env templates.</p>
+      <ul class="plain-list">
+        {sensitiveFiles.map((file) => <li>{file}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

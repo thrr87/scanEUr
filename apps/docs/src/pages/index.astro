@@ -1,0 +1,173 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const answerItems = [
+  "What external services does this repo depend on?",
+  "Which vendors may touch user or customer data?",
+  "Which dependencies may require jurisdictional or contractual review?",
+  "Which findings are quick wins?",
+  "Which dependencies are strategic and should not be changed casually?",
+  "Which unknown services need manual investigation?",
+  "What should we document before customers or reviewers ask?"
+];
+
+const trustPrinciples = [
+  "Free and MIT-licensed",
+  "Local-first",
+  "Offline by default",
+  "No telemetry",
+  "No affiliate links",
+  "No paid ranking",
+  "No sponsored recommendations"
+];
+
+const trustCopy =
+  "Free and MIT-licensed · Local-first · Offline by default · No telemetry · No affiliate links · No paid ranking · No sponsored recommendations";
+
+const scanSignals = [
+  "package manifests",
+  "lockfiles",
+  "Docker files",
+  "GitHub Actions workflows",
+  "environment templates",
+  "deployment configs",
+  "provider-specific config files"
+];
+
+const docsLinks = [
+  {
+    title: "Methodology",
+    text: "Separate dimensions avoid hiding context behind a single global score.",
+    href: "/methodology/",
+    linkText: "Read the methodology"
+  },
+  {
+    title: "Trust model",
+    text: "Local-first, offline by default, no telemetry, no affiliate links, and no paid ranking.",
+    href: "/trust-model/",
+    linkText: "Review the trust model"
+  },
+  {
+    title: "Vendor database",
+    text: "Vendor profiles are structured review aids with verification status and limitations.",
+    href: "/vendor-database/",
+    linkText: "Open the database guide"
+  }
+];
+---
+
+<BaseLayout title="Local-first dependency intelligence" description="scanEUr helps teams identify external dependencies in a local project without uploading source code.">
+  <section class="hero home-hero">
+    <div class="hero-visual" aria-hidden="true">
+      <div class="dependency-map">
+        <span class="map-line line-a"></span>
+        <span class="map-line line-b"></span>
+        <span class="map-line line-c"></span>
+        <span class="map-node core">scanEUr</span>
+        <span class="map-node node-a">payments</span>
+        <span class="map-node node-b">analytics</span>
+        <span class="map-node node-c">auth</span>
+        <span class="map-node node-d">CI</span>
+        <span class="map-node node-e">unknown</span>
+        <span class="map-node node-f">AI API</span>
+      </div>
+    </div>
+
+    <div class="hero-copy">
+      <p class="brand-title">scanEUr</p>
+      <h1>Understand your software stack’s external dependencies before someone asks.</h1>
+      <div class="hero-subcopy">
+        <p>
+          scanEUr is a free, MIT-licensed, local-first scanner that helps European teams identify
+          third-party services, SaaS tools, SDKs, cloud platforms, analytics, payments,
+          authentication, observability, AI APIs, and other operational dependencies in a local project.
+        </p>
+        <p>
+          It does not provide legal advice. It gives you a practical dependency inventory,
+          evidence, confidence labels, review priorities, and realistic alternatives.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <a class="button" href="/cli-quickstart/">Run a local scan</a>
+        <a class="button secondary" href="/methodology/">Read the methodology</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-marquee" aria-label={trustCopy}>
+    <div class="trust-track">
+      {trustPrinciples.map((principle) => <span>{principle}</span>)}
+      {trustPrinciples.map((principle) => <span aria-hidden="true">{principle}</span>)}
+    </div>
+  </section>
+
+  <section class="home-section question-section">
+    <div class="section-kicker">Review questions</div>
+    <div class="split-section">
+      <div class="section-sticky">
+        <h2>What it helps you answer</h2>
+        <p>
+          A first-pass inventory for customer reviews, privacy checks, procurement questions,
+          and architecture discussions.
+        </p>
+      </div>
+      <ol class="question-list editorial-list">
+        {answerItems.map((item) => <li>{item}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-section scan-section">
+    <div class="section-kicker">Scope</div>
+    <div class="scan-layout">
+      <div>
+        <h2>What it scans</h2>
+        <p>
+          scanEUr scans common project files such as package manifests, lockfiles, Docker files,
+          GitHub Actions workflows, environment templates, deployment configs, and provider-specific
+          config files.
+        </p>
+        <p>
+          MVP scans local repository files only. It does not upload source code and does not perform
+          domain scanning.
+        </p>
+      </div>
+      <ul class="signal-list">
+        {scanSignals.map((signal) => <li>{signal}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-section limits-section">
+    <div class="limit-line"></div>
+    <div class="limits-copy">
+      <p class="section-kicker">Limits</p>
+      <h2>What it does not do</h2>
+      <p>
+        scanEUr does not certify GDPR compliance, declare vendors legal or illegal, or recommend
+        replacing critical infrastructure blindly. It is a technical review-support tool, not a
+        lawyer, DPO, procurement process, or architecture review.
+      </p>
+    </div>
+  </section>
+
+  <section class="home-section docs-section">
+    <div class="section-kicker">Visible trust principles</div>
+    <div class="docs-header">
+      <h2>Read the method before you act on a finding.</h2>
+      <p>
+        The docs keep the boundary clear: observed facts, inferred signals, unknowns, and
+        manual-review recommendations stay separate.
+      </p>
+    </div>
+    <div class="docs-links">
+      {docsLinks.map((link) => (
+        <a class="doc-link" href={link.href}>
+          <span>{link.title}</span>
+          <p>{link.text}</p>
+          <strong>{link.linkText}</strong>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

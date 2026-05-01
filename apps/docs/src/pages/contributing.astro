@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const practices = [
+  "Keep vendor profiles evidence-based and include review metadata.",
+  "Separate observed facts, inferred signals, unknowns, and manual-review recommendations.",
+  "Do not add affiliate links, paid placement, or sponsored recommendation language.",
+  "Use conservative wording for jurisdictional, contractual, and data-processing signals.",
+  "Add limitations when a profile is partial, stale, or based only on fingerprints."
+];
+---
+
+<BaseLayout title="Contributing" description="How to contribute vendor data and documentation without weakening scanEUr trust commitments.">
+  <PageIntro
+    title="Contributing"
+    lead="scanEUr is designed to be usable, forkable, and auditable. Contributions should improve practical review evidence without turning findings into legal conclusions."
+  />
+  <section class="page-content">
+    <div class="content-block">
+      <h2>Contribution expectations</h2>
+      <ul class="plain-list">
+        {practices.map((practice) => <li>{practice}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

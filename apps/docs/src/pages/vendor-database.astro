@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const statuses = ["verified", "partially_verified", "fingerprint_only", "agent_draft", "unknown"];
+---
+
+<BaseLayout title="Vendor database" description="How scanEUr vendor profiles map identifiers to structured review aids.">
+  <PageIntro
+    title="Vendor database"
+    lead="The vendor database maps detected identifiers to provider profiles. Profiles include categories, aliases, domains, packages, environment variable patterns, Docker images, GitHub Actions, config files, jurisdiction/control notes, data-category notes, scoring defaults, evidence sources, verification status, and limitations."
+  />
+  <section class="page-content">
+    <div class="content-block">
+      <h2>Verification statuses</h2>
+      <ul class="status-list">
+        {statuses.map((status) => <li>{status}</li>)}
+      </ul>
+    </div>
+    <Callout title="Important note">
+      <p>A vendor profile is not a compliance verdict. It is a structured review aid.</p>
+    </Callout>
+  </section>
+</BaseLayout>

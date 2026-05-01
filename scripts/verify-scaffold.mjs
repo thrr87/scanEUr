@@ -76,6 +76,10 @@ const packageNames = new Map([
   ["packages/types/package.json", "@scaneur/types"]
 ]);
 
+const allowedExternalDependencies = new Map([
+  ["apps/docs/package.json", new Set(["astro"])]
+]);
+
 function fail(message) {
   console.error(message);
   process.exitCode = 1;
@@ -112,7 +116,8 @@ for (const [relativePath, expectedName] of packageNames.entries()) {
   for (const field of ["dependencies", "devDependencies", "peerDependencies"]) {
     const dependencies = packageJson[field] ?? {};
     for (const dependencyName of Object.keys(dependencies)) {
-      if (!dependencyName.startsWith("@scaneur/")) {
+      const allowedForPackage = allowedExternalDependencies.get(relativePath) ?? new Set();
+      if (!dependencyName.startsWith("@scaneur/") && !allowedForPackage.has(dependencyName)) {
         fail(`${relativePath} contains external ${field} dependency: ${dependencyName}`);
       }
     }

@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const examples = [
+  "GA4 may have practical analytics alternatives such as Matomo, Plausible, or Umami depending on the use case.",
+  "Auth0 migrations may involve Zitadel, Keycloak, or Ory, but authentication migrations are high-impact and require careful planning.",
+  "Payments are rarely quick wins. Mollie, Adyen, Payone, or others may be relevant depending on market, payment methods, billing model, tax, and risk requirements."
+];
+---
+
+<BaseLayout title="Alternatives" description="How scanEUr frames alternatives without ideological ranking or paid placement.">
+  <PageIntro
+    title="Alternatives"
+    lead="scanEUr suggests alternatives where relevant, but alternatives are not ideological rankings. A good alternative depends on feature fit, maturity, migration effort, operational burden, self-hosting complexity, data residency, ownership/control, API compatibility, and known gaps."
+  />
+  <section class="page-content">
+    <div class="content-block">
+      <h2>Examples</h2>
+      <ul class="plain-list">
+        {examples.map((example) => <li>{example}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

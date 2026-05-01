@@ -1,0 +1,9 @@
+---
+const { title, lead } = Astro.props;
+---
+
+<section class="page-intro">
+  <p class="section-label">scanEUr documentation</p>
+  <h1>{title}</h1>
+  {lead && <p class="lead">{lead}</p>}
+</section>

@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Callout from "../components/Callout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import PageIntro from "../components/PageIntro.astro";
+
+const commands = `npm install -g @scaneur/cli
+scaneur scan .
+scaneur scan . --format json --output scaneur-report.json
+scaneur explain stripe
+scaneur alternatives ga4`;
+---
+
+<BaseLayout title="CLI quickstart" description="Install the scanEUr CLI, run a local scan, and generate a report.">
+  <PageIntro
+    title="CLI quickstart"
+    lead="Install the CLI, run a local scan, and generate a report."
+  />
+  <section class="page-content">
+    <div class="content-block" id="commands">
+      <h2>Commands</h2>
+      <CodeBlock code={commands} language="bash" />
+    </div>
+
+    <Callout title="Offline note">
+      <p>The default scan runs locally and offline. It does not send source code, dependency lists, file paths, or telemetry to scanEUr.</p>
+    </Callout>
+
+    <div class="page-actions">
+      <a class="button" href="/how-it-works/">Read the CLI docs</a>
+      <a class="button secondary" href="/sample-report/">View a sample report</a>
+    </div>
+  </section>
+</BaseLayout>

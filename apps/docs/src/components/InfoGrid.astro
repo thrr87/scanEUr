@@ -1,0 +1,13 @@
+---
+const { items = [] } = Astro.props;
+---
+
+<div class="info-grid">
+  {items.map((item) => (
+    <article class="info-card">
+      <h3>{item.title}</h3>
+      <p>{item.text}</p>
+      {item.href && <a class="text-link" href={item.href}>{item.linkText ?? "Read more"}</a>}
+    </article>
+  ))}
+</div>
