@@ -4,6 +4,6 @@
   "dependencies": {
     "@sentry/nextjs": "8.31.0",
     "@stripe/stripe-js": "4.6.0",
-    "next": "15.0.0"
+    "next": "15.5.18"
   }
 }
