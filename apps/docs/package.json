@@ -12,6 +12,6 @@
     "test": "node test/docs-site.test.mjs && npm run build"
   },
   "devDependencies": {
-    "astro": "5.7.13"
+    "astro": "6.4.4"
   }
 }
